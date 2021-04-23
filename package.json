@@ -1,0 +1,25 @@
+{
+  "name": "torrent-manager",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aliasxrus/torrent-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aliasxrus/torrent-manager/issues"
+  },
+  "homepage": "https://github.com/aliasxrus/torrent-manager#readme",
+  "dependencies": {
+    "jsdom": "^16.5.3",
+    "node-fetch": "^2.6.1"
+  }
+}
