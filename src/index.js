@@ -35,7 +35,7 @@ const getPeers = async () => {
 
     const {peers: peersData} = await requestWithToken(`http://127.0.0.1:${config.port}/gui/?action=getpeers${hashArray}`);
 
-    return peersData.filter(Array.isArray).flat().map(peer => ({ip: peer[1], client: peer[5].trim()}));
+    return peersData.filter(Array.isArray).flat().map(peer => ({ip: peer[1], utp: peer[3], client: peer[5].trim()}));
 };
 
 let blockedIp = [];
@@ -48,8 +48,9 @@ const blockPeers = (peers) => {
             !blockedIp.includes(peer.ip)
         ) {
             console.log('Block:', peer.ip, peer.client);
-            const result = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=in action=block remoteip=${peer.ip}`).toString();
-            console.log(result);
+            const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=in action=block remoteip=${peer.ip}`).toString();
+            const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=out action=block remoteip=${peer.ip}`).toString();
+            console.log(`In: ${resultIn.trim()}, Out: ${resultOut.trim()}`);
             blockedIp.push(peer.ip);
         }
     });
