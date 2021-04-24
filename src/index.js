@@ -38,12 +38,19 @@ const getPeers = async () => {
     return peersData.filter(Array.isArray).flat().map(peer => ({ip: peer[1], client: peer[5].trim()}));
 };
 
+let blockedIp = [];
 const blockPeers = (peers) => {
+    if (blockedIp.length > 100000) blockedIp = [];
+
     peers.forEach(peer => {
-        if (!peer.client.startsWith('μTorrent') && !peer.client.startsWith('BitTorrent')) {
+        if (!peer.client.startsWith('μTorrent') &&
+            !peer.client.startsWith('BitTorrent') &&
+            !blockedIp.includes(peer.ip)
+        ) {
             console.log('Block:', peer.ip, peer.client);
             const result = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=in action=block remoteip=${peer.ip}`).toString();
             console.log(result);
+            blockedIp.push(peer.ip);
         }
     });
 };
@@ -78,6 +85,7 @@ const run = async () => {
     blockConfig();
     config.token = await getToken();
 
+    console.log(`Manager started! Scan interval: ${config.interval}`);
     setInterval(  async () => {
         const peers = await getPeers();
         blockPeers(peers);
