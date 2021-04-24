@@ -48,12 +48,35 @@ const blockPeers = (peers) => {
     });
 };
 
-const run = async () => {
-    config.token = await getToken();
-    // https://techexpert.tips/windows/windows-block-ip-address/
-    childProcess.execSync('sc config mpssvc start=auto');
-    childProcess.execSync('net stop mpssvc && net start mpssvc');
+// https://techexpert.tips/windows/windows-block-ip-address/
+const blockConfig = () => {
+    const mpssvcConfig = childProcess.execSync(`sc qc mpssvc`).toString();
+    console.log(mpssvcConfig);
+
+    // Вроде и без этого должно работать, посмотрим.
+    // if (!mpssvcConfig.toLowerCase().includes('auto_start')) {
+    //     childProcess.execSync('sc config mpssvc start=auto');
+    //     console.log('sc config mpssvc start=auto');
+    //
+    //     childProcess.execSync('net stop mpssvc && net start mpssvc');
+    //     console.log('net stop mpssvc && net start mpssvc');
+    // }
+
+    const mpssvcRunning = childProcess.execSync(`sc query mpssvc`).toString();
+    console.log(mpssvcRunning);
+
+    if (!mpssvcRunning.toLowerCase().includes('running')) {
+        childProcess.execSync('net stop mpssvc && net start mpssvc');
+        console.log('net stop mpssvc && net start mpssvc');
+    }
+
     childProcess.execSync('netsh advfirewall set allprofiles state on');
+    // netsh advfirewall show allprofiles state
+}
+
+const run = async () => {
+    blockConfig();
+    config.token = await getToken();
 
     setInterval(  async () => {
         const peers = await getPeers();
