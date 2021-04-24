@@ -40,7 +40,7 @@ const getPeers = async () => {
 
 const blockPeers = (peers) => {
     peers.forEach(peer => {
-        if (!peer.client.startsWith('μTorrent')) {
+        if (!peer.client.startsWith('μTorrent') && !peer.client.startsWith('BitTorrent')) {
             console.log('Block:', peer.ip, peer.client);
             const result = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=in action=block remoteip=${peer.ip}`).toString();
             console.log(result);
