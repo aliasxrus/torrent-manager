@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/aliasxrus/torrent-manager#readme",
   "dependencies": {
+    "html-escaper": "^3.0.3",
     "jsdom": "^16.5.3",
     "node-fetch": "^2.6.1"
   }

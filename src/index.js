@@ -2,38 +2,53 @@ const childProcess = require('child_process');
 const fetch = require('node-fetch');
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
+const {unescape} = require('html-escaper');
 const config = require('../config');
 
+const URL = 'http://127.0.0.1';
+
 const getToken = async () => {
-    const html = await fetch(`http://127.0.0.1:${config.port}/gui/token.html`,
+    const html = await fetch(`${URL}:${config.port}/gui/token.html`,
         {
             headers: {
                 Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
             }
         })
-        .then(res => res.text());
+        .then(res => {
+            if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
+                config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
+            }
+            return res.text();
+        });
 
     const dom = new JSDOM(html);
-
-    return dom.window.document.querySelector('div').textContent;
+    config.token = dom.window.document.querySelector('div').textContent;
 };
 
 const requestWithToken = (url) => {
     return fetch(url + `&token=${config.token}`,
         {
             headers: {
+                Cookie: config.guid,
                 Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
             }
         })
-        .then(res => res.json());
+        .then(res => {
+            if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
+                config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
+            }
+            return res.text();
+        })
+        .then(unescape)
+        .then(JSON.parse);
 };
 
 const getPeers = async () => {
-    const {torrents} = await requestWithToken(`http://127.0.0.1:${config.port}/gui/?list=1`);
+    const {torrents} = await requestWithToken(`${URL}:${config.port}/gui/?list=1`);
 
     const hashArray = torrents.map(value => `&hash=${value[0]}`).join('');
 
-    const {peers: peersData} = await requestWithToken(`http://127.0.0.1:${config.port}/gui/?action=getpeers${hashArray}`);
+    const {peers: peersData} = await requestWithToken(`${URL}:${config.port}/gui/?action=getpeers${hashArray}`);
 
     return peersData.filter(Array.isArray).flat().map(peer => ({ip: peer[1], utp: peer[3], client: peer[5].trim()}));
 };
@@ -84,7 +99,7 @@ const blockConfig = () => {
 
 const run = async () => {
     blockConfig();
-    config.token = await getToken();
+    await getToken();
 
     console.log(`Manager started! Scan interval: ${config.interval}`);
     setInterval(  async () => {
