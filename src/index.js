@@ -26,7 +26,7 @@ const getToken = async () => {
 	if (divTag !== null) {
 		config.token = dom.window.document.querySelector('div').textContent;			
 	} else {
-		console.log('Something wrong with WebUI');
+		console.log('Something wrong with WebUI. Check port in config.js.');
 		process.exit();
 	}
 };
