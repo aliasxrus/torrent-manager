@@ -22,7 +22,13 @@ const getToken = async () => {
         });
 
     const dom = new JSDOM(html);
-    config.token = dom.window.document.querySelector('div').textContent;
+	var divTag = dom.window.document.querySelector('div');
+	if (divTag !== null) {
+		config.token = dom.window.document.querySelector('div').textContent;			
+	} else {
+		console.log('Something wrong with WebUI');
+		process.exit();
+	}
 };
 
 const requestWithToken = (url) => {
