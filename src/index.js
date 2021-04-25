@@ -63,8 +63,9 @@ const blockPeers = (peers) => {
             !blockedIp.includes(peer.ip)
         ) {
             console.log('Block:', peer.ip, peer.client);
-            const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=in action=block remoteip=${peer.ip}`).toString();
-            const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="BLOCK IP ADDRESS - ${peer.ip}" dir=out action=block remoteip=${peer.ip}`).toString();
+            const ruleName = `BLOCK IP ADDRESS - ${peer.ip}`;
+            const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=in action=block remoteip=${peer.ip}`).toString();
+            const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=out action=block remoteip=${peer.ip}`).toString();
             console.log(`In: ${resultIn.trim()}, Out: ${resultOut.trim()}`);
             blockedIp.push(peer.ip);
         }
