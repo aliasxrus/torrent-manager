@@ -22,9 +22,9 @@ const getToken = async () => {
         });
 
     const dom = new JSDOM(html);
-	var divTag = dom.window.document.querySelector('div');
+	const divTag = dom.window.document.querySelector('div');
 	if (divTag !== null) {
-		config.token = dom.window.document.querySelector('div').textContent;			
+		config.token = dom.window.document.querySelector('div').textContent;
 	} else {
 		console.log('Something wrong with WebUI. Check port in config.js.');
 		process.exit();
@@ -49,6 +49,13 @@ const requestWithToken = (url) => {
         .then(JSON.parse);
 };
 
+const version = (clientName) => {
+    const reg = clientName.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/g);
+    if(!reg) return [0, 0];
+    const mm = Array.from(reg)[0].split('.').map(e => parseInt(e));
+    return [mm[0],  mm[1]];
+}
+
 const getPeers = async () => {
     const {torrents} = await requestWithToken(`${URL}:${config.port}/gui/?list=1`);
 
@@ -56,16 +63,28 @@ const getPeers = async () => {
 
     const {peers: peersData} = await requestWithToken(`${URL}:${config.port}/gui/?action=getpeers${hashArray}`);
 
-    return peersData.filter(Array.isArray).flat().map(peer => ({ip: peer[1], utp: peer[3], client: peer[5].trim()}));
+    return peersData.filter(Array.isArray).flat().map(peer => {
+        const client = peer[5].trim();
+        return {ip: peer[1], utp: peer[3], client, version: version(client) }
+    });
 };
 
 let blockedIp = [];
+
+const mu = config.filters.mu;
+const bit = config.filters.bit;
+const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
+const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
+const filterFake = peer => peer.client.startsWith('[FAKE]');
+
+
 const blockPeers = (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
 
     peers.forEach(peer => {
-        if (!peer.client.startsWith('μTorrent') &&
-            !peer.client.startsWith('BitTorrent') &&
+        if (!filterMu(peer) &&
+            !filterBit(peer) &&
+            !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
             console.log('Block:', peer.ip, peer.client);
