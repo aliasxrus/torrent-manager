@@ -111,7 +111,7 @@ const blockPeers = (peers) => {
             filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
-            console.log('Block:', peer.ip, peer.client);
+            console.log(`${new Date().toLocaleString()} Block:`, peer.ip, peer.client);
             config.blockIp(peer.ip);
             blockedIp.push(peer.ip);
         }
@@ -171,7 +171,6 @@ const run = async () => {
 
     console.log(`Manager started! Scan interval: ${config.interval}`);
     setInterval(async () => {
-        console.log('Scan...')
         const peers = await getPeers();
         blockPeers(peers);
     }, config.interval);
