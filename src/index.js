@@ -108,7 +108,7 @@ const blockPeers = (peers) => {
     peers.forEach(peer => {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
-            filterFake(peer) &&
+            !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
             console.log(`${new Date().toLocaleString()} Block:`, peer.ip, peer.client);
