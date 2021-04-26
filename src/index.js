@@ -1,9 +1,17 @@
 const childProcess = require('child_process');
+const fsPromises = require('fs/promises');
+const path = require('path');
+const Shell = require('node-powershell');
 const fetch = require('node-fetch');
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
 const {unescape} = require('html-escaper');
 const config = require('../config');
+
+const ps = new Shell({
+    executionPolicy: 'Bypass',
+    noProfile: true
+});
 
 const URL = 'http://127.0.0.1';
 
@@ -22,11 +30,11 @@ const getToken = async () => {
         });
 
     const dom = new JSDOM(html);
-	const divTag = dom.window.document.querySelector('div');
-	if (divTag == null) {
+    const divTag = dom.window.document.querySelector('div');
+    if (divTag == null) {
         console.log('Something wrong with WebUI. Check port in config.js.');
         process.exit(404);
-	}
+    }
 
     config.token = dom.window.document.querySelector('div').textContent;
 };
@@ -51,9 +59,9 @@ const requestWithToken = (url) => {
 
 const version = (clientName) => {
     const reg = clientName.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/g);
-    if(!reg) return [0, 0];
+    if (!reg) return [0, 0];
     const mm = Array.from(reg)[0].split('.').map(e => parseInt(e));
-    return [mm[0],  mm[1]];
+    return [mm[0], mm[1]];
 }
 
 const getPeers = async () => {
@@ -65,9 +73,26 @@ const getPeers = async () => {
 
     return peersData.filter(Array.isArray).flat().map(peer => {
         const client = peer[5].trim();
-        return {ip: peer[1], utp: peer[3], client, version: version(client) }
+        return {ip: peer[1], utp: peer[3], client, version: version(client)}
     });
 };
+
+config.blockIp = async (ip) => {
+    await fsPromises.appendFile(
+        path.join(config.dir, '..', 'ipfilter.dat'),
+        `${ip}\n`,
+        {flag: config.flagWriteIpFilter}
+    );
+
+    await requestWithToken(`${URL}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=0`);
+}
+
+const blockIpFirewall = async (ip) => {
+    const ruleName = `BLOCK IP ADDRESS - ${ip}`;
+    const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=in action=block remoteip=${ip}`).toString();
+    const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=out action=block remoteip=${ip}`).toString();
+    console.log(`In: ${resultIn.trim()}, Out: ${resultOut.trim()}`);
+}
 
 let blockedIp = [];
 
@@ -76,7 +101,6 @@ const bit = config.filters.bit;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
 const filterFake = peer => peer.client.startsWith('[FAKE]');
-
 
 const blockPeers = (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
@@ -88,10 +112,7 @@ const blockPeers = (peers) => {
             !blockedIp.includes(peer.ip)
         ) {
             console.log('Block:', peer.ip, peer.client);
-            const ruleName = `BLOCK IP ADDRESS - ${peer.ip}`;
-            const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=in action=block remoteip=${peer.ip}`).toString();
-            const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=out action=block remoteip=${peer.ip}`).toString();
-            console.log(`In: ${resultIn.trim()}, Out: ${resultOut.trim()}`);
+            config.blockIp(peer.ip);
             blockedIp.push(peer.ip);
         }
     });
@@ -124,11 +145,27 @@ const blockConfig = () => {
 }
 
 const run = async () => {
-    blockConfig();
+    if (!config.dir) {
+        try {
+            await ps.addCommand('(Get-Process uTorrent, BitTorrent).Path');
+            const dir = await ps.invoke();
+            config.dir = dir.split('\r\n')[0].trim();
+        } catch (error) {
+            console.log('ERROR: Process not found. Процесс uTorrent или BitTorrent не найден, запустите торрент клиент и повторите попытку. Если это не поможет то укажите путь до клиента в config.js');
+            process.exit(1);
+        }
+    }
+    console.log(`Dir: ${config.dir}`);
+
+    if (config.blockMethod === 1) {
+        blockConfig();
+        config.blockIp = blockIpFirewall;
+    }
+
     await getToken();
 
     console.log(`Manager started! Scan interval: ${config.interval}`);
-    setInterval(  async () => {
+    setInterval(async () => {
         const peers = await getPeers();
         blockPeers(peers);
     }, config.interval);
