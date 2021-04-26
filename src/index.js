@@ -81,10 +81,10 @@ config.blockIp = async (ip) => {
     await fsPromises.appendFile(
         path.join(config.dir, '..', 'ipfilter.dat'),
         `${ip}\n`,
-        {flag: config.flagWriteIpFilter}
+        {flag: 'a'}
     );
 
-    await requestWithToken(`${URL}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=0`);
+    await requestWithToken(`${URL}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 }
 
 const blockIpFirewall = async (ip) => {
@@ -108,7 +108,7 @@ const blockPeers = (peers) => {
     peers.forEach(peer => {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
-            !filterFake(peer) &&
+            filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
             console.log('Block:', peer.ip, peer.client);
@@ -165,8 +165,13 @@ const run = async () => {
 
     await getToken();
 
+    if (config.flagClearIpFilter) {
+        await fsPromises.appendFile(path.join(config.dir, '..', 'ipfilter.dat'), ``, {flag: 'w'});
+    }
+
     console.log(`Manager started! Scan interval: ${config.interval}`);
     setInterval(async () => {
+        console.log('Scan...')
         const peers = await getPeers();
         blockPeers(peers);
     }, config.interval);

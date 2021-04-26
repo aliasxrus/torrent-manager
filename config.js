@@ -14,8 +14,8 @@ module.exports = {
 
     // Это фильтр версии, менять только при необходимости.
     filters: {
-        mu: { major: 3, minor: 5 },
-        bit: { major: 7, minor: 10 }
+        mu: {major: 3, minor: 5},
+        bit: {major: 7, minor: 10}
     },
 
     /*
@@ -32,10 +32,6 @@ module.exports = {
     * */
     dir: '',
 
-    /*
-    * Механизм работы с файлом ipfilter.dat
-    * w - открыть файл для записи, каждый запуск будет создавать чистый файл.
-    * a - открыть файл для записи данных в конец файла.
-    * */
-    flagWriteIpFilter: 'w',
+    // Очищать ipfilter.dat при запуске.
+    flagClearIpFilter: true,
 }
