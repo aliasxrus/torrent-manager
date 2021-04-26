@@ -147,7 +147,8 @@ const blockConfig = () => {
 const run = async () => {
     if (!config.dir) {
         try {
-            await ps.addCommand('(Get-Process uTorrent, BitTorrent).Path');
+            // await ps.addCommand('(Get-Process uTorrent, BitTorrent).Path');
+            await ps.addCommand('(get-process | where {$_.ProcessName -in \'uTorrent\', \'BitTorrent\'}).Path');
             const dir = await ps.invoke();
             config.dir = dir.split('\r\n')[0].trim();
         } catch (error) {
