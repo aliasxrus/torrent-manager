@@ -24,11 +24,11 @@ const getToken = async () => {
     const dom = new JSDOM(html);
 	const divTag = dom.window.document.querySelector('div');
 	if (divTag !== null) {
-		config.token = dom.window.document.querySelector('div').textContent;
-	} else {
-		console.log('Something wrong with WebUI. Check port in config.js.');
-		process.exit();
+        console.log('Something wrong with WebUI. Check port in config.js.');
+        process.exit(404);
 	}
+
+    config.token = dom.window.document.querySelector('div').textContent;
 };
 
 const requestWithToken = (url) => {
