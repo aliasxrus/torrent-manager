@@ -32,6 +32,10 @@ module.exports = {
     * */
     dir: '',
 
-    // Очищать ipfilter.dat при запуске.
+    /*
+    * Очищать ipfilter.dat при запуске.
+    * true - удалять историю.
+    * false - только дописывать новые IP.
+    * */
     flagClearIpFilter: true,
 }
