@@ -23,7 +23,7 @@ const getToken = async () => {
 
     const dom = new JSDOM(html);
 	const divTag = dom.window.document.querySelector('div');
-	if (divTag !== null) {
+	if (divTag == null) {
         console.log('Something wrong with WebUI. Check port in config.js.');
         process.exit(404);
 	}
