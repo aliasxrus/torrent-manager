@@ -97,7 +97,7 @@ const mu = config.filters.mu;
 const bit = config.filters.bit;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
-const filterFake = peer => peer.client.startsWith('[FAKE]');
+// const filterFake = peer => peer.client.startsWith('[FAKE]');
 
 const blockPeers = (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
@@ -105,10 +105,10 @@ const blockPeers = (peers) => {
     peers.forEach(peer => {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
-            !filterFake(peer) &&
+            // !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
-            console.log(`${new Date().toLocaleString()} Block:`, peer.ip, peer.client);
+            console.log(`${new Date().toLocaleString()}:\tBlock:`, peer.ip, peer.client);
             config.blockIp(peer.ip);
             blockedIp.push(peer.ip);
         }
