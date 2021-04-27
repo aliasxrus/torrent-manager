@@ -31,10 +31,7 @@ const getToken = async () => {
 
     const dom = new JSDOM(html);
     const divTag = dom.window.document.querySelector('div');
-    if (divTag == null) {
-        console.log('Something wrong with WebUI. Check port in config.js.');
-        process.exit(404);
-    }
+    if (!divTag) throw Error('dibTag is null');
 
     config.token = dom.window.document.querySelector('div').textContent;
 };
@@ -145,12 +142,20 @@ const blockConfig = () => {
 }
 
 const run = async () => {
+    try {
+        await getToken();
+    } catch (error) {
+        console.log(`Something wrong with WebUI. Check port in config.js.\nПроизошла ошибка, нет доступа до ${URL}:${config.port}/gui\nПроверьте правильность ввода данных в config.js, попробуйте сменить порт.`);
+        process.exit(404);
+    }
+
     if (!config.dir) {
         try {
             // await ps.addCommand('(Get-Process uTorrent, BitTorrent).Path');
             await ps.addCommand('(get-process | where {$_.ProcessName -in \'uTorrent\', \'BitTorrent\'}).Path');
             const dir = await ps.invoke();
             config.dir = dir.split('\r\n')[0].trim();
+            await ps.dispose();
         } catch (error) {
             console.log('ERROR: Process not found. Процесс uTorrent или BitTorrent не найден, запустите торрент клиент и повторите попытку. Если это не поможет то укажите путь до клиента в config.js');
             process.exit(1);
@@ -162,8 +167,6 @@ const run = async () => {
         blockConfig();
         config.blockIp = blockIpFirewall;
     }
-
-    await getToken();
 
     if (config.flagClearIpFilter) {
         await fsPromises.appendFile(path.join(config.dir, '..', 'ipfilter.dat'), ``, {flag: 'w'});
