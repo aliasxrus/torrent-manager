@@ -80,8 +80,6 @@ config.blockIp = async (ip) => {
         `${ip}\n`,
         {flag: 'a'}
     );
-
-    await requestWithToken(`${URL}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 }
 
 const blockIpFirewall = async (ip) => {
@@ -99,7 +97,7 @@ const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.sta
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
 // const filterFake = peer => peer.client.startsWith('[FAKE]');
 
-const blockPeers = (peers) => {
+const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
 
     peers.forEach(peer => {
@@ -108,11 +106,13 @@ const blockPeers = (peers) => {
             // !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
-            console.log(`${new Date().toLocaleString()}:\tBlock:`, peer.ip, peer.client);
+            console.log(`${new Date().toLocaleString()}:\tBlock`, peer.ip, peer.client);
             config.blockIp(peer.ip);
             blockedIp.push(peer.ip);
         }
     });
+
+    await requestWithToken(`${URL}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };
 
 // https://techexpert.tips/windows/windows-block-ip-address/
@@ -175,7 +175,7 @@ const run = async () => {
     console.log(`Manager started! Scan interval: ${config.interval}`);
     setInterval(async () => {
         const peers = await getPeers();
-        blockPeers(peers);
+        await blockPeers(peers);
     }, config.interval);
 };
 

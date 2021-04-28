@@ -1,5 +1,5 @@
 # torrent_manager
-mvp v. 0.0.2
+mvp v. 0.0.4
 
 1. Качаем NodeJS версию LTS: https://nodejs.org/ru/
 2. Качаете [этот репозиторий](https://github.com/aliasxrus/torrent-manager) (Если нет гита то тыкаете сверху кнопку Code и выбираете Download zip, затем извлекаете и переходите в папку).
