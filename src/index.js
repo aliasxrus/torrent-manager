@@ -1,5 +1,6 @@
 const childProcess = require('child_process');
 const fsPromises = require('fs/promises');
+const {version: programVersion} = require('../package.json');
 const path = require('path');
 const Shell = require('node-powershell');
 const fetch = require('node-fetch');
@@ -68,10 +69,18 @@ const getPeers = async () => {
 
     const {peers: peersData} = await requestWithToken(`${URL}:${config.port}/gui/?action=getpeers${hashArray}`);
 
-    return peersData.filter(Array.isArray).flat().map(peer => {
-        const client = peer[5].trim();
-        return {ip: peer[1], utp: peer[3], client, version: version(client)}
-    });
+    try {
+        return peersData.filter(Array.isArray).flat().map(peer => {
+            const client = peer[5].trim();
+            return {ip: peer[1], utp: peer[3], client, version: version(client)}
+        });
+    } catch (error) {
+        console.log(error);
+        console.log('torrents', torrents);
+        console.log('peersData', peersData);
+    }
+
+    return [];
 };
 
 config.blockIp = async (ip) => {
@@ -142,6 +151,8 @@ const blockConfig = () => {
 }
 
 const run = async () => {
+    console.log('Version:', programVersion);
+
     try {
         await getToken();
     } catch (error) {
