@@ -106,7 +106,7 @@ const getPeers = async () => {
 };
 
 config.blockIp = async (ip) => {
-    debug('blockIp:', blockIp);
+    debug('blockIp:', ip);
     await fsPromises.appendFile(
         path.join(config.dir, '..', 'ipfilter.dat'),
         `${ip}\n`,
