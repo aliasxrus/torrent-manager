@@ -38,4 +38,11 @@ module.exports = {
     * false - только дописывать новые IP.
     * */
     flagClearIpFilter: true,
+
+    /*
+    * Выводить больше логов, нужно для поиска ошибок
+    * true - включен
+    * false - выключен
+    * */
+    debugLog: false,
 }
