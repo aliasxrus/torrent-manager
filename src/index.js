@@ -51,7 +51,9 @@ const getToken = async () => {
 };
 
 const requestWithToken = (url) => {
-    debug('requestWithToken url:', requestWithToken);
+    debug('requestWithToken url:', url);
+    debug('requestWithToken config.guid:', config.guid);
+    debug('url + `&token=${config.token}:', url + `&token=${config.token}`);
     return fetch(url + `&token=${config.token}`,
         {
             headers: {
@@ -69,7 +71,7 @@ const requestWithToken = (url) => {
         })
         .then(unescape)
         .then(text => {
-            debug(text);
+            debug('text =>', text);
             return JSON.parse(text);
         });
 };
