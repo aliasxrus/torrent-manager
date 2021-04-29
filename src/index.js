@@ -87,14 +87,16 @@ const getPeers = async () => {
     const {torrents} = await requestWithToken(`${URL}:${config.port}/gui/?list=1`);
     debug('torrents:', torrents);
 
-    const hashArray = torrents.map(value => `&hash=${value[0]}`).join('');
-    debug('hashArray:', hashArray);
+    const allPeers = [];
 
-    const {peers: peersData} = await requestWithToken(`${URL}:${config.port}/gui/?action=getpeers${hashArray}`);
-    debug('peersData:', peersData);
+    while (torrents.length) {
+        const hashArray = torrents.splice(0, 20).map(value => `&hash=${value[0]}`).join('');
+        const {peers: peersData} = await requestWithToken(`${URL}:${config.port}/gui/?action=getpeers${hashArray}`);
+        allPeers.push(...peersData);
+    }
 
     try {
-        return peersData.filter(Array.isArray).flat().map(peer => {
+        return allPeers.filter(Array.isArray).flat().map(peer => {
             const client = peer[5].trim();
             return {ip: peer[1], utp: peer[3], client, version: version(client)}
         });
