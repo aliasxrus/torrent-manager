@@ -15,7 +15,8 @@ module.exports = {
     // Это фильтр версии, менять только при необходимости.
     filters: {
         mu: {major: 3, minor: 5},
-        bit: {major: 7, minor: 10}
+        bit: {major: 7, minor: 10},
+        muMac: { major: 0, minor: 0 }
     },
 
     /*
