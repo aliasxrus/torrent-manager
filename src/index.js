@@ -130,6 +130,8 @@ let blockedIp = [];
 
 const mu = config.filters.mu;
 const bit = config.filters.bit;
+const muMac = config.filters.muMac;
+const filterMuMac = peer => peer.client.startsWith('μTorrent Mac') && peer.version[0] >= muMac.major && peer.version >= muMac.minor;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
 // const filterFake = peer => peer.client.startsWith('[FAKE]');
@@ -141,6 +143,7 @@ const blockPeers = async (peers) => {
     peers.forEach(peer => {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
+            !filterMuMac(peer) &&
             // !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
