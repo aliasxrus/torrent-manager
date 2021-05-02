@@ -1,4 +1,3 @@
-const childProcess = require('child_process');
 const fsPromises = require('fs/promises');
 const {version: programVersion} = require('../package.json');
 const path = require('path');
@@ -25,13 +24,6 @@ config.blockIp = async (ip) => {
         `${ip}\n`,
         {flag: 'a'}
     );
-}
-
-const blockIpFirewall = async (ip) => {
-    const ruleName = `BLOCK IP ADDRESS - ${ip}`;
-    const resultIn = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=in action=block remoteip=${ip}`).toString();
-    const resultOut = childProcess.execSync(`netsh advfirewall firewall add rule name="${ruleName}" dir=out action=block remoteip=${ip}`).toString();
-    log.info(`In: ${resultIn.trim()}, Out: ${resultOut.trim()}`);
 }
 
 let blockedIp = [];
@@ -63,32 +55,6 @@ const blockPeers = async (peers) => {
     await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };
 
-// https://techexpert.tips/windows/windows-block-ip-address/
-const blockConfig = () => {
-    const mpssvcConfig = childProcess.execSync(`sc qc mpssvc`).toString();
-    log.info(mpssvcConfig);
-
-    // Вроде и без этого должно работать, посмотрим.
-    // if (!mpssvcConfig.toLowerCase().includes('auto_start')) {
-    //     childProcess.execSync('sc config mpssvc start=auto');
-    //     log.info('sc config mpssvc start=auto');
-    //
-    //     childProcess.execSync('net stop mpssvc && net start mpssvc');
-    //     log.info('net stop mpssvc && net start mpssvc');
-    // }
-
-    const mpssvcRunning = childProcess.execSync(`sc query mpssvc`).toString();
-    log.info(mpssvcRunning);
-
-    if (!mpssvcRunning.toLowerCase().includes('running')) {
-        childProcess.execSync('net stop mpssvc && net start mpssvc');
-        log.info('net stop mpssvc && net start mpssvc');
-    }
-
-    childProcess.execSync('netsh advfirewall set allprofiles state on');
-    // netsh advfirewall show allprofiles state
-}
-
 const run = async () => {
     log.info('Version:', programVersion);
 
@@ -115,19 +81,14 @@ const run = async () => {
     }
     log.info(`Dir: ${config.dir}`);
 
-    if (config.blockMethod === 1) {
-        blockConfig();
-        config.blockIp = blockIpFirewall;
-    }
-
     if (config.flagClearIpFilter) {
         await fsPromises.appendFile(path.join(config.dir, '..', 'ipfilter.dat'), ``, {flag: 'w'});
     }
 
     log.info(`Manager started! Scan interval: ${config.interval}`);
     setInterval(async () => {
-        const peers = await apiTorrent.getPeers();
-        peers.filter(Array.isArray).flat().map(peer => {
+        let peers = await apiTorrent.getPeers();
+        peers = peers.filter(Array.isArray).flat().map(peer => {
             const client = peer[5].trim();
             return {ip: peer[1], utp: peer[3], client, version: version(client)}
         });
