@@ -5,24 +5,29 @@ const {unescape} = require('html-escaper');
 const config = require('../../../config');
 
 const getToken = async () => {
-    const html = await fetch(`${config.apiTorrentUrl}:${config.port}/gui/token.html`,
-        {
-            headers: {
-                Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
-            }
-        })
-        .then(res => {
-            if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
-                config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
-            }
-            return res.text();
-        });
+    try {
+        const html = await fetch(`${config.apiTorrentUrl}:${config.port}/gui/token.html`,
+            {
+                headers: {
+                    Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
+                }
+            })
+            .then(res => {
+                if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
+                    config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
+                }
+                return res.text();
+            });
 
-    const dom = new JSDOM(html);
-    const divTag = dom.window.document.querySelector('div');
-    if (!divTag) throw Error('Token not found');
+        const dom = new JSDOM(html);
+        const divTag = dom.window.document.querySelector('div');
+        if (!divTag) throw Error('Token not found');
 
-    config.token = dom.window.document.querySelector('div').textContent;
+        config.token = dom.window.document.querySelector('div').textContent;
+    } catch (error) {
+        log.info(`Something wrong with WebUI. Check port in config.js.\nПроизошла ошибка, нет доступа до ${config.apiTorrentUrl}:${config.port}/gui\nПроверьте правильность ввода данных в config.js, попробуйте сменить порт.`);
+        process.exit(404);
+    }
 };
 
 const requestWithToken = (url) => {
