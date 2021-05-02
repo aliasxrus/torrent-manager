@@ -41,7 +41,7 @@ const blockPeers = async (peers) => {
 };
 
 const scan = async () => {
-    if (!(await getIpFilterPath())) {
+    if (!await getIpFilterPath()) {
         const ipFilterPath = await findIpFilterPath();
         await setIpFilterPath(ipFilterPath);
     }
