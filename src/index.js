@@ -3,7 +3,7 @@ const config = require('../config');
 const apiTorrent = require('./middleware/api/torrent');
 const log = require('./middleware/log');
 const {getIpFilterPath} = require('./middleware/child_process');
-const {setIpFilterPath, addIpToFilter} = require('./middleware/fs');
+const {setIpFilterPath} = require('./middleware/fs');
 const {scan} = require('./middleware/filter');
 
 const scanning = async () => {

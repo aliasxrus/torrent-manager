@@ -1,5 +1,6 @@
 const config = require('../../config');
 const apiTorrent = require('./api/torrent');
+const {addIpToFilter} = require('./fs');
 const log = require('./log');
 
 const version = (clientName) => {
@@ -17,23 +18,21 @@ const muMac = config.filters.muMac;
 const filterMuMac = peer => peer.client.startsWith('μTorrent Mac') && peer.version[0] >= muMac.major && peer.version >= muMac.minor;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
-// const filterFake = peer => peer.client.startsWith('[FAKE]');
 
 const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
 
-    peers.forEach(peer => {
+    for (let i = 0; i < peers.length; i++) {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
             !filterMuMac(peer) &&
-            // !filterFake(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
             log.info(`${new Date().toLocaleString()}:\tBlock`, peer.ip, peer.client);
-            addIpToFilter(peer.ip);
+            await addIpToFilter(peer.ip);
             blockedIp.push(peer.ip);
         }
-    });
+    }
 
     await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };

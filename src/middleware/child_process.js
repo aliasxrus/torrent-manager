@@ -9,7 +9,7 @@ const getIpFilterPath = async () => {
     }
 
     const ipFilterPath = path.join(torrentClientPath, '..', 'ipfilter.dat');
-    log.info(`IP FILTER DIRECTORY: ${ipFilterPath}`, '\n');
+    log.info(`IP FILTER DIRECTORY:\n${ipFilterPath}`, '\n');
 
     return ipFilterPath;
 };
