@@ -1,17 +1,15 @@
 const path = require('path');
 const childProcess = require('child_process');
-const {torrentClientPath} = require('../../config');
+let {torrentClientPath} = require('../../config');
 const log = require('./log');
 
 const getIpFilterPath = async () => {
-    let torrentClientPath = torrentClientPath;
-
     if (!torrentClientPath) {
         torrentClientPath = await getProcessPath();
     }
 
     const ipFilterPath = path.join(torrentClientPath, '..', 'ipfilter.dat');
-    log.info(`IP FILTER DIRECTORY: ${ipFilterPath}`);
+    log.info(`IP FILTER DIRECTORY: ${ipFilterPath}`, '\n');
 
     return ipFilterPath;
 };
@@ -24,7 +22,7 @@ const getProcessPath = async () => {
         const processPath = allProcess
             .split('\n')
             .map(str => str.trim())
-            .find(str => str.endsWith('uTorrent') || str.endsWith('BitTorrent'));
+            .find(str => str.endsWith('uTorrent.exe') || str.endsWith('BitTorrent.exe'));
 
         if (!processPath) throw Error('Process uTorrent or BitTorrent not found');
 

@@ -42,9 +42,12 @@ const blockPeers = async (peers) => {
 };
 
 const run = async () => {
-    log.info('VERSION:', programVersion);
+    log.info('VERSION:', programVersion, '\n');
 
     const ipFilterPath = await getIpFilterPath();
+    console.log(setIpFilterPath)
+    console.log(ipFilterPath)
+
     await setIpFilterPath(ipFilterPath);
 
     try {
