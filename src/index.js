@@ -6,14 +6,14 @@ const {getIpFilterPath} = require('./middleware/child_process');
 const {setIpFilterPath, addIpToFilter} = require('./middleware/fs');
 const {scan} = require('./middleware/filter');
 
-const scanCycle = async () => {
+const scanning = async () => {
     try {
         await scan();
-        new Promise(resolve => setTimeout(resolve, config.interval));
     } catch (error) {
         log.info(error);
     } finally {
-        scanCycle();
+        await new Promise(resolve => setTimeout(resolve, config.interval));
+        scanning();
     }
 };
 
@@ -26,7 +26,7 @@ const run = async () => {
     await apiTorrent.getToken();
 
     log.info(`Manager started! Scan interval: ${config.interval}`);
-    scanCycle();
+    scanning();
 };
 
 run();
