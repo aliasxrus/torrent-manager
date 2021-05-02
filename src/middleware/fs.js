@@ -7,12 +7,13 @@ const setIpFilterPath = async (path) => {
     ipFilterPath = path;
 
     if (flagClearIpFilter) {
-        await new Promise(resolve => fs.appendFile(
-            ipFilterPath,
-            ``,
-            {flag: 'w'},
-            resolve
-        ));
+        await new Promise(resolve =>
+            fs.appendFile(
+                ipFilterPath,
+                ``,
+                {flag: 'w'},
+                resolve
+            ));
     }
 };
 
@@ -25,9 +26,7 @@ const addIpToFilter = async (ip) => {
     ));
 };
 
-const getIpFilterPath = () => {
-    return ipFilterPath;
-};
+const getIpFilterPath = () => ipFilterPath;
 
 module.exports = {
     setIpFilterPath,

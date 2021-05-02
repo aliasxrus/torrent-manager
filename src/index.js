@@ -10,8 +10,7 @@ const scanning = async () => {
     } catch (error) {
         log.info(error);
     } finally {
-        await new Promise(resolve => setTimeout(resolve, config.interval));
-        scanning();
+        setTimeout(scanning, config.interval);
     }
 };
 
