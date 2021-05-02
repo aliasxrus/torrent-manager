@@ -3,7 +3,7 @@ const childProcess = require('child_process');
 let {torrentClientPath} = require('../../config');
 const log = require('./log');
 
-const getIpFilterPath = async () => {
+const findIpFilterPath = async () => {
     if (!torrentClientPath) {
         torrentClientPath = await getProcessPath();
     }
@@ -35,5 +35,5 @@ const getProcessPath = async () => {
 };
 
 module.exports = {
-    getIpFilterPath,
+    findIpFilterPath,
 };

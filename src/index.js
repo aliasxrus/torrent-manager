@@ -20,9 +20,6 @@ const scanning = async () => {
 const run = async () => {
     log.info('VERSION:', programVersion, '\n');
 
-    const ipFilterPath = await getIpFilterPath();
-    await setIpFilterPath(ipFilterPath);
-
     await apiTorrent.getToken();
 
     log.info(`Manager started! Scan interval: ${config.interval}`);

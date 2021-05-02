@@ -25,7 +25,12 @@ const addIpToFilter = async (ip) => {
     ));
 };
 
+const getIpFilterPath = () => {
+    return ipFilterPath;
+};
+
 module.exports = {
     setIpFilterPath,
     addIpToFilter,
+    getIpFilterPath,
 };

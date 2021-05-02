@@ -1,5 +1,7 @@
 const config = require('../../config');
 const apiTorrent = require('./api/torrent');
+const {findIpFilterPath} = require('./child_process');
+const {setIpFilterPath, getIpFilterPath} = require('./fs');
 const {addIpToFilter} = require('./fs');
 const log = require('./log');
 
@@ -23,6 +25,7 @@ const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
 
     for (let i = 0; i < peers.length; i++) {
+        const peer = peers[i];
         if (!filterMu(peer) &&
             !filterBit(peer) &&
             !filterMuMac(peer) &&
@@ -38,6 +41,11 @@ const blockPeers = async (peers) => {
 };
 
 const scan = async () => {
+    if (!getIpFilterPath) {
+        const ipFilterPath = await findIpFilterPath();
+        await setIpFilterPath(ipFilterPath);
+    }
+
     let peers = await apiTorrent.getPeers();
     peers = peers.filter(Array.isArray).flat().map(peer => {
         const client = peer[5].trim();
