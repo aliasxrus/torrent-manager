@@ -16,8 +16,7 @@ const findIpFilterPath = async () => {
 
 const getProcessPath = async () => {
     try {
-        childProcess.execSync(`chcp 65001`);
-        const allProcess = childProcess.execSync(`wmic process get executablepath`).toString();
+        const allProcess = childProcess.execSync(`chcp 65001 | wmic process get executablepath`).toString();
 
         const processPath = allProcess
             .split('\n')
