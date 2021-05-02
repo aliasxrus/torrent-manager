@@ -24,7 +24,7 @@ module.exports = {
     * Указывать если программа сама не смогла правильно определить директорию расположения клиента.
     * При указании пути необходимо экранировать обратные слэши, например: 'C:\\Users\\Administrator\\AppData\\Roaming\\uTorrent\\uTorrent.exe'
     * */
-    dir: '',
+    torrentClientPath: '',
 
     /*
     * Очищать ipfilter.dat при запуске.

@@ -1,29 +1,15 @@
-const fsPromises = require('fs/promises');
 const {version: programVersion} = require('../package.json');
-const path = require('path');
-const Shell = require('node-powershell');
 const config = require('../config');
 const apiTorrent = require('./middleware/api/torrent');
 const log = require('./middleware/log');
-
-const ps = new Shell({
-    executionPolicy: 'Bypass',
-    noProfile: true
-});
+const {getIpFilterPath} = require('./middleware/child_process');
+const {setIpFilterPath, addIpToFilter} = require('./middleware/fs');
 
 const version = (clientName) => {
     const reg = clientName.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/g);
     if (!reg) return [0, 0];
     const mm = Array.from(reg)[0].split('.').map(e => parseInt(e));
     return [mm[0], mm[1]];
-}
-
-config.blockIp = async (ip) => {
-    await fsPromises.appendFile(
-        path.join(config.dir, '..', 'ipfilter.dat'),
-        `${ip}\n`,
-        {flag: 'a'}
-    );
 }
 
 let blockedIp = [];
@@ -47,7 +33,7 @@ const blockPeers = async (peers) => {
             !blockedIp.includes(peer.ip)
         ) {
             log.info(`${new Date().toLocaleString()}:\tBlock`, peer.ip, peer.client);
-            config.blockIp(peer.ip);
+            addIpToFilter(peer.ip);
             blockedIp.push(peer.ip);
         }
     });
@@ -56,33 +42,16 @@ const blockPeers = async (peers) => {
 };
 
 const run = async () => {
-    log.info('Version:', programVersion);
+    log.info('VERSION:', programVersion);
+
+    const ipFilterPath = await getIpFilterPath();
+    await setIpFilterPath(ipFilterPath);
 
     try {
         await apiTorrent.getToken();
     } catch (error) {
         log.info(`Something wrong with WebUI. Check port in config.js.\nПроизошла ошибка, нет доступа до ${config.apiTorrentUrl}:${config.port}/gui\nПроверьте правильность ввода данных в config.js, попробуйте сменить порт.`);
         process.exit(404);
-    }
-
-    if (!config.dir) {
-        try {
-            // await ps.addCommand('(Get-Process uTorrent, BitTorrent).Path');
-            await ps.addCommand('(get-process | where {$_.ProcessName -in \'uTorrent\', \'BitTorrent\'}).Path');
-            const dir = await ps.invoke();
-
-            config.dir = dir.split('\r\n')[0].trim();
-
-            await ps.dispose();
-        } catch (error) {
-            log.info('ERROR: Process not found. Процесс uTorrent или BitTorrent не найден, запустите торрент клиент и повторите попытку. Если это не поможет то укажите путь до клиента в config.js');
-            process.exit(1);
-        }
-    }
-    log.info(`Dir: ${config.dir}`);
-
-    if (config.flagClearIpFilter) {
-        await fsPromises.appendFile(path.join(config.dir, '..', 'ipfilter.dat'), ``, {flag: 'w'});
     }
 
     log.info(`Manager started! Scan interval: ${config.interval}`);
