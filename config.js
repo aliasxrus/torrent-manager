@@ -20,18 +20,11 @@ module.exports = {
     },
 
     /*
-    * Выбор способа блокировки:
-    * 0 - Через ipfilter.dat
-    * 1 - Через firewall (устаревший способ)
-    * */
-    blockMethod: 0,
-
-    /*
     * Расположение торрент клиента. На текущий момент только для работы с ipfilter.dat
     * Указывать если программа сама не смогла правильно определить директорию расположения клиента.
     * При указании пути необходимо экранировать обратные слэши, например: 'C:\\Users\\Administrator\\AppData\\Roaming\\uTorrent\\uTorrent.exe'
     * */
-    dir: '',
+    torrentClientPath: '',
 
     /*
     * Очищать ipfilter.dat при запуске.
@@ -46,4 +39,6 @@ module.exports = {
     * false - выключен
     * */
     debugLog: false,
+
+    apiTorrentUrl: 'http://127.0.0.1',
 }
