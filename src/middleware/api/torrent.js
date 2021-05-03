@@ -4,6 +4,8 @@ const {JSDOM} = jsdom;
 const {unescape} = require('html-escaper');
 const config = require('../../../config');
 
+let token;
+
 const getToken = async () => {
     try {
         const html = await fetch(`${config.apiTorrentUrl}:${config.port}/gui/token.html`,
@@ -25,27 +27,37 @@ const getToken = async () => {
 
         config.token = dom.window.document.querySelector('div').textContent;
     } catch (error) {
+        token = null;
         log.info(`Something wrong with WebUI. Check port in config.js.\nПроизошла ошибка, нет доступа до ${config.apiTorrentUrl}:${config.port}/gui\nПроверьте правильность ввода данных в config.js, попробуйте сменить порт.`);
-        process.exit(404);
     }
 };
 
-const requestWithToken = (url) => {
-    return fetch(url + `&token=${config.token}`,
-        {
-            headers: {
-                Cookie: config.guid,
-                Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
-            }
-        })
-        .then(res => {
-            if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
-                config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
-            }
-            return res.text();
-        })
-        .then(unescape)
-        .then(JSON.parse);
+const requestWithToken = async (url) => {
+    if (!token) {
+        token = await getToken();
+    }
+
+    try {
+        return fetch(url + `&token=${config.token}`,
+            {
+                headers: {
+                    Cookie: config.guid,
+                    Authorization: 'Basic ' + Buffer.from(`${config.username}:${config.password}`).toString('base64'),
+                }
+            })
+            .then(res => {
+                if (res.headers.raw()['set-cookie'] && res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID='))) {
+                    config.guid = res.headers.raw()['set-cookie'].find(el => el.startsWith('GUID=')).split(';')[0];
+                }
+                return res.text();
+            })
+            .then(unescape)
+            .then(JSON.parse);
+    } catch (error) {
+        token = null;
+        log.info('Request error. Ошибка получения данных!');
+        throw error;
+    }
 };
 
 const getPeers = async () => {

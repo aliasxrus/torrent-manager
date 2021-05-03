@@ -17,8 +17,6 @@ const scanning = async () => {
 const run = async () => {
     log.info('VERSION:', programVersion, '\n');
 
-    await apiTorrent.getToken();
-
     log.info(`Manager started! Scan interval: ${config.interval}`);
     scanning();
 };
