@@ -1,10 +1,14 @@
-# torrent_manager
+# Torrent Manager
 MVP v. 0.0.6
 
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
 + [Вывод на Binance](#binance);
 + [Как безопасно качать файлы](#QBittorrent).
+
+_**Donate:**_
+- TRX/BTT: _**TSyujStera3SMSxuntzqAaf5y4SBzwnm23**_
+- VISA SBERBANK: _**4274 3200 4502 9926**_
 
 <a name="info">Как использовать скрипт</a>
 -------------------------
