@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
 const {unescape} = require('html-escaper');
+const log = require('../log');
 const config = require('../../../config');
 
 let token;

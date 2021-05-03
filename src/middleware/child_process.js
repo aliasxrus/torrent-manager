@@ -31,7 +31,6 @@ const getProcessPath = async () => {
     } catch (error) {
         log.info(error);
         log.info('ERROR: Process not found.\nВНИМАНИЕ!!!\nПроцесс uTorrent или BitTorrent не найден, запустите торрент клиент и повторите попытку. Если это не поможет то укажите путь до клиента в config.js');
-        process.exit(1);
     }
 };
 
