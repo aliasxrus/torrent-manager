@@ -40,5 +40,8 @@ module.exports = {
     * */
     debugLog: false,
 
+    /*
+    * Это не трогаем, это для удобной отладки :)
+    * */
     apiTorrentUrl: 'http://127.0.0.1',
 }
