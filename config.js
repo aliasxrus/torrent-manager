@@ -57,7 +57,7 @@ module.exports = {
     /*
     * Включение автоматической настройки.
     * Значение флагов в autoConfig: Вкл = 1, Выкл = 0
-    * Для запуска команда: npm tconfig
+    * Для запуска команда: node src/autoConfig/index.js
     * */
     setSetting: false,
     autoConfig: {
@@ -70,8 +70,8 @@ module.exports = {
         /*
         * Автоматический запуск скачивания торрентов при появлении в указанной папке торрент файлов.
         * */
-        dir_autoload: 1,
-        dir_autoload_flag: 'C:\\Users\\Administrator\\Downloads\\torrent_files',
+        dir_autoload_flag: 1,
+        dir_autoload: 'C:\\Users\\Administrator\\Downloads\\torrent_files',
 
         /*
         * Удалять торрент файлы (с расширением .torrent) после автоматического скачивания.
