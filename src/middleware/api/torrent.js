@@ -9,6 +9,8 @@ let token;
 
 const getToken = async () => {
     try {
+        if (config.authToken) return config.authToken;
+
         const html = await fetch(`${config.apiTorrentUrl}:${config.port}/gui/token.html`,
             {
                 headers: {
@@ -26,7 +28,7 @@ const getToken = async () => {
         const divTag = dom.window.document.querySelector('div');
         if (!divTag) throw Error('Token not found');
 
-        config.token = dom.window.document.querySelector('div').textContent;
+        return dom.window.document.querySelector('div').textContent;
     } catch (error) {
         token = null;
         log.info(`Something wrong with WebUI. Check port in config.js.\nПроизошла ошибка, нет доступа до ${config.apiTorrentUrl}:${config.port}/gui\nПроверьте правильность ввода данных в config.js, попробуйте сменить порт.`);
@@ -39,7 +41,7 @@ const requestWithToken = async (url) => {
     }
 
     try {
-        return fetch(url + `&token=${config.token}`,
+        return fetch(url + `&token=${token}`,
             {
                 headers: {
                     Cookie: config.guid,

@@ -44,4 +44,5 @@ module.exports = {
     * Это не трогаем, это для удобной отладки :)
     * */
     apiTorrentUrl: 'http://127.0.0.1',
+    authToken: '',
 }
