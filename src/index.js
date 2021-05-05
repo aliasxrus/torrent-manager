@@ -1,6 +1,5 @@
 const {version: programVersion} = require('../package.json');
 const config = require('../config');
-const apiTorrent = require('./middleware/api/torrent');
 const log = require('./middleware/log');
 const {scan} = require('./middleware/filter');
 
