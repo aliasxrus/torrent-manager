@@ -17,9 +17,11 @@ let blockedIp = [];
 const mu = config.filters.mu;
 const bit = config.filters.bit;
 const muMac = config.filters.muMac;
+const libtorrent = config.filters.libtorrent;
 const filterMuMac = peer => peer.client.startsWith('μTorrent Mac') && peer.version[0] >= muMac.major && peer.version >= muMac.minor;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
+const filterLibtorrent = peer => peer.client.startsWith('libtorrent') && peer.version[0] >= libtorrent.major && peer.version[1] >= libtorrent.minor;
 
 const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
@@ -29,6 +31,7 @@ const blockPeers = async (peers) => {
         if (!filterMu(peer) &&
             !filterBit(peer) &&
             !filterMuMac(peer) &&
+            !filterLibtorrent(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
             log.info(`${new Date().toLocaleString()}:\tBlock`, peer.ip, peer.client);

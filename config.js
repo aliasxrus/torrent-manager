@@ -16,7 +16,8 @@ module.exports = {
     filters: {
         mu: {major: 3, minor: 5},
         bit: {major: 7, minor: 10},
-        muMac: { major: 0, minor: 0 }
+        muMac: { major: 0, minor: 0 },
+        libtorrent: { major: 0, minor: 0 }
     },
 
     /*
