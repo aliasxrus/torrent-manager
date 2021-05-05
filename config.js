@@ -57,7 +57,7 @@ module.exports = {
     /*
     * Включение автоматической настройки.
     * Значение флагов в autoConfig: Вкл = 1, Выкл = 0
-    * Для запуска команда: node src/autoConfig/index.js
+    * Команда для запуска: node src/autoConfig/index.js
     * */
     setSetting: false,
     autoConfig: {
