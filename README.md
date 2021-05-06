@@ -1,6 +1,6 @@
 # Torrent Manager
 MVP v. 0.0.7
-#### Наш канал в Telegram: https://t.me/btt_manager
+#### Наша группа в Telegram: https://t.me/btt_manager
 
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
