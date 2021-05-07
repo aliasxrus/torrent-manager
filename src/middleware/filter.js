@@ -7,9 +7,9 @@ const log = require('./log');
 
 const version = (clientName) => {
     const reg = clientName.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/g);
-    if (!reg) return [0, 0];
+    if (!reg) return [0, 0, 0];
     const mm = Array.from(reg)[0].split('.').map(e => parseInt(e));
-    return [mm[0], mm[1]];
+    return [mm[0], mm[1], mm[2]];
 }
 
 let blockedIp = [];
@@ -18,10 +18,10 @@ const mu = config.filters.mu;
 const bit = config.filters.bit;
 const muMac = config.filters.muMac;
 const libtorrent = config.filters.libtorrent;
-const filterMuMac = peer => peer.client.startsWith('μTorrent Mac') && peer.version[0] >= muMac.major && peer.version >= muMac.minor;
+const filterMuMac = peer => peer.client.startsWith('μTorrent Mac') && peer.version[0] >= muMac.major && peer.version[1] >= muMac.minor;
 const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
 const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
-const filterLibtorrent = peer => peer.client.startsWith('libtorrent') && peer.version[0] >= libtorrent.major && peer.version[1] >= libtorrent.minor;
+const filterLibtorrent = peer => peer.client.startsWith('libtorrent') && peer.version[0] >= libtorrent.major && peer.version[1] >= libtorrent.minor && peer.version[2] >= libtorrent.micro;
 
 const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
