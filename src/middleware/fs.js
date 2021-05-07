@@ -26,10 +26,21 @@ const addIpToFilter = async (ip) => {
     ));
 };
 
+const readAllFile = async (path) => {
+    return new Promise(resolve => fs.readFile(
+        path,
+        (error, data) => {
+            if (error) throw error;
+            resolve(data.toString());
+        }
+    ));
+};
+
 const getIpFilterPath = () => ipFilterPath;
 
 module.exports = {
     setIpFilterPath,
     addIpToFilter,
     getIpFilterPath,
+    readAllFile,
 };
