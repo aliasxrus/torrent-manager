@@ -38,9 +38,16 @@ const readAllFile = async (path) => {
 
 const getIpFilterPath = () => ipFilterPath;
 
+const creatVerDat = async (programVersion) => {
+    fs.writeFile('version.dat', `${programVersion}`, function (err) {
+        if (err) return console.log(err)}
+    );
+};
+
 module.exports = {
     setIpFilterPath,
     addIpToFilter,
     getIpFilterPath,
     readAllFile,
+    creatVerDat
 };
