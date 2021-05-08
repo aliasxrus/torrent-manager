@@ -2,6 +2,7 @@ const {version: programVersion} = require('../package.json');
 const config = require('../config');
 const log = require('./middleware/log');
 const {scan} = require('./middleware/filter');
+const {creatVerDat} = require('./middleware/fs');
 
 const scanning = async () => {
     try {
@@ -15,7 +16,9 @@ const scanning = async () => {
 
 const run = async () => {
     log.info('VERSION:', programVersion, '\n');
-
+    
+    creatVerDat(programVersion);
+    
     log.info(`Manager started! Scan interval: ${config.interval}`);
     scanning();
 };
