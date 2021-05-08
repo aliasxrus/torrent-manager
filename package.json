@@ -1,6 +1,6 @@
 {
   "name": "torrent-manager",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,6 @@
   "dependencies": {
     "html-escaper": "^3.0.3",
     "jsdom": "^16.5.3",
-    "node-fetch": "^2.6.1",
-    "node-powershell": "^4.0.0"
+    "node-fetch": "^2.6.1"
   }
 }
