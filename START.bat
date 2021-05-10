@@ -10,16 +10,9 @@ set verstr=\"version\"\: \"%ver%\"
 
 findstr /ic:"%verstr%" %file2%>nul 2>&1
 if errorlevel 1 (
- goto searchError
+ echo Updating and reinstalling npm packages...
+ npm i && node src/index.js
 ) else (
- goto searchSucces
+ echo Starting script...
+ node src/index.js
 )
-
-:searchError
-echo Updating and reinstalling npm packages...
-npm i && node src/index.js
-goto eof
-
-:searchSucces
-echo Starting script...
-node src/index.js
