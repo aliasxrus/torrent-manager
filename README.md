@@ -34,7 +34,8 @@ _**Donate:**_
 При желании можно взять _**[VPS](https://zomro.com/vds.html?from=294244)**_ в аренду, проверенные виртуальные сервера можно арендовать на _**[ZOMRO](https://zomro.com/vds.html?from=294244)**_.
 Рекомендую тариф _**VDS/VPS «MEGA»**_ c SSD до 100Gb с операционной системой Windows. Средний срок окупаемости до недели. Для более стабильной работы торрент клиента лучше использовать Windows-Server-2012-R2-RUS.
 
-https://www.binance.com/ru/register?ref=140122449 
+Протестированные VPS:
+- _**[FirstByte](https://firstbyte.ru/?from=80394)**_
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
