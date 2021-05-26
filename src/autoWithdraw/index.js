@@ -17,17 +17,19 @@ const scan = async () => {
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
-        log.info('BTT:', balance);
+        log.info(`${new Date().toLocaleString()}:\tBTT:`, balance);
     }
     // Проверка баланса, он должен быть больше 1001
     if (balance < 1001) return;
 
     // Получаем баланс на шлюзе
     const {tokenBalances} = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
-    const {amount} = tokenBalances.find(token => token.tokenId === '1002000');
+    let {balance: amount} = tokenBalances.find(token => token.tokenId === '1002000');
+    amount = Math.floor(amount / 1000000)
+
     if (logBalance && lastData.amount !== amount) {
         lastData.amount = amount;
-        log.info('Amount:', amount);
+        log.info(`${new Date().toLocaleString()}:\tAmount:`, amount);
     }
     if (amount < minAmount || amount < 1001) return;
 
