@@ -47,15 +47,19 @@ module.exports = {
     autoBttTransfer: {
         /*
         * Включить автоматический перевод из IN APP в ON CHAIN
-        * true - удалять историю.
-        * false - только дописывать новые IP.
+        * true - автоматический вывод включен.
+        * false - автоматический вывод выключен.
         * */
         autoTransfer: false,
         // Порт со страницы SPEED, взять в адресной строке, пример https://speed.btt.network/gui/index.html?port=50458#/dashboard тут он будет 50458.
         port: 50458,
         interval: 1000,
-        // Адрес получения информармации
+        // Адрес получения информации.
         url: 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a',
+        // Максимальная сумма вывода, если баланс меньше то выведет максимально доступный. Выводит за вычетом 1 BTT.
+        amountLimit: 99999,
+        // Минимальный баланс на шлюзе при котором начинать попытку вывода.
+        minBalance: 100000,
     },
 
     /*
