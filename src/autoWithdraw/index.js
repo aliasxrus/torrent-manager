@@ -5,8 +5,8 @@ const log = require('../middleware/log');
 const scan = async () => {
     const {port, url, amountLimit, minAmount, logBalance} = config.autoBttTransfer;
 
-    const token = fetch(`http://127.0.0.1:${port}/api/token`).then(res => res.text());
-    const balance = fetch(`http://127.0.0.1:${port}/api/status?t=${token}`)
+    const token = await fetch(`http://127.0.0.1:${port}/api/token`).then(res => res.text());
+    const balance = await fetch(`http://127.0.0.1:${port}/api/status?t=${token}`)
         .then(res => res.json())
         .then(({balance}) => Math.floor(balance / 1000000));
 
