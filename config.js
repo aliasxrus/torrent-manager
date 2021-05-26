@@ -14,10 +14,15 @@ module.exports = {
 
     // Это фильтр версии, менять только при необходимости.
     filters: {
+        // uTorrent
         mu: {major: 3, minor: 5},
+        // BitTorrent
         bit: {major: 7, minor: 10},
+        // uTorrent Mac
         muMac: {major: 0, minor: 0},
+        // uTorrent web and BitTorrent web
         libtorrent: {major: 0, minor: 0, micro: 0},
+        // Неопределившиеся версии (определение идёт с задержкой, по этой причине не блокируем)
         unknown: {major: 0, minor: 0},
     },
 
@@ -34,6 +39,24 @@ module.exports = {
     * false - только дописывать новые IP.
     * */
     flagClearIpFilter: true,
+
+    /*
+    * ВНИМАНИЕ! ФУНКЦИОНАЛ НЕ ЯВЛЯЕТСЯ НАДЕЖНЫМ, ВСЕ BTT МОГУТ ПРОПАСТЬ!
+    * Автоматический вывод.
+    * */
+    autoBttTransfer: {
+        /*
+        * Включить автоматический перевод из IN APP в ON CHAIN
+        * true - удалять историю.
+        * false - только дописывать новые IP.
+        * */
+        autoTransfer: false,
+        // Порт со страницы SPEED, взять в адресной строке, пример https://speed.btt.network/gui/index.html?port=50458#/dashboard тут он будет 50458.
+        port: 50458,
+        interval: 1000,
+        // Адрес получения информармации
+        url: 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a',
+    },
 
     /*
     * ###############################################
