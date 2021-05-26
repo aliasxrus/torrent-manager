@@ -2,6 +2,11 @@ const fetch = require('node-fetch');
 const config = require('../../config');
 const log = require('../middleware/log');
 
+const lastData = {
+    amount: 0,
+    balance: 0,
+}
+
 const scan = async () => {
     const {port, url, amountLimit, minAmount, logBalance} = config.autoBttTransfer;
 
@@ -10,14 +15,20 @@ const scan = async () => {
         .then(res => res.json())
         .then(({balance}) => Math.floor(balance / 1000000));
 
-    if (logBalance) log.info('BTT:', balance);
+    if (logBalance && lastData.balance !== balance) {
+        lastData.balance = balance;
+        log.info('BTT:', balance);
+    }
     // Проверка баланса, он должен быть больше 1001
     if (balance < 1001) return;
 
     // Получаем баланс на шлюзе
-    const {tokenBalances} = await fetch(url).then(text => text.json());
-    const {amount} = tokenBalances.find(token => token.tokenAbbr === 'BTT');
-    if (logBalance) log.info('Amount:', amount);
+    const {tokenBalances} = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
+    const {amount} = tokenBalances.find(token => token.tokenId === '1002000');
+    if (logBalance && lastData.amount !== amount) {
+        lastData.amount = amount;
+        log.info('Amount:', amount);
+    }
     if (amount < minAmount || amount < 1001) return;
 
     let withdrawSum = Math.min(amountLimit, balance, amount);
