@@ -8,10 +8,13 @@ const scan = async () => {
     const token = fetch(`http://127.0.0.1:${port}/api/token`).then(res => res.text());
     const balance = fetch(`http://127.0.0.1:${port}/api/status?t=${token}`)
         .then(res => res.json())
-        .then(({balance}) => balance / 1000000);
-    if (logBalance) log.info('BTT:', balance);
-    if (amountLimit < 1001 || amountLimit < balance) return;
+        .then(({balance}) => Math.floor(balance / 1000000));
 
+    if (logBalance) log.info('BTT:', balance);
+    // Проверка баланса, он должен быть больше 1001
+    if (balance < 1001) return;
+
+    // Получаем баланс на шлюзе
     const {tokenBalances} = await fetch(url).then(text => text.json());
     const {amount} = tokenBalances.find(token => token.tokenAbbr === 'BTT');
     if (logBalance) log.info('Amount:', amount);
