@@ -36,6 +36,7 @@ _**Donate:**_
 
 Протестированные VPS:
 - _**[FirstByte](https://firstbyte.ru/?from=80394)**_
+- _**[Vultr](https://www.vultr.com/?ref=8882663)**_ (почасовая оплата)
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
