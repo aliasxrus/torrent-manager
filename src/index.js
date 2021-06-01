@@ -4,6 +4,10 @@ const log = require('./middleware/log');
 const {scan} = require('./middleware/filter');
 const {creatVerDat} = require('./middleware/fs');
 
+if (config.setSetting) {
+    require('./autoConfig');
+}
+
 if (config.autoBttTransfer.autoTransfer) {
     require('./autoWithdraw');
 }
