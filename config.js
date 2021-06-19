@@ -18,8 +18,6 @@ module.exports = {
         mu: {major: 3, minor: 5},
         // BitTorrent
         bit: {major: 7, minor: 10},
-        // uTorrent Mac
-        muMac: {major: 0, minor: 0},
         // uTorrent web and BitTorrent web
         libtorrent: {major: 0, minor: 0, micro: 0},
         // Неопределившиеся версии (определение идёт с задержкой, по этой причине не блокируем)
