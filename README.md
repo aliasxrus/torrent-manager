@@ -36,6 +36,13 @@ _**Donate:**_
 
 Протестированные VPS:
 - _**[FirstByte](https://firstbyte.ru/?from=80394)**_
+- _**[ZOMRO](https://zomro.com/vds.html?from=294244)**_
+
+Лучшие Linux сервера у _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_
+
+Черный список:
+- _**[Vultr](https://www.vultr.com/?ref=8882663)**_ (почасовая оплата)
+- ZetaLink
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
