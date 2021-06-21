@@ -21,8 +21,6 @@
   "dependencies": {
     "html-escaper": "^3.0.3",
     "jsdom": "^16.5.3",
-    "node-fetch": "^2.6.1",
-    "node-pre-gyp": "^0.17.0",
-    "webtorrent-hybrid": "^4.1.0"
+    "node-fetch": "^2.6.1"
   }
 }

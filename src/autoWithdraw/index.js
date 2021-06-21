@@ -38,7 +38,7 @@ const scan = async () => {
     let withdrawSum = Math.min(amountLimit, BtfsWalletBalance, balance);
     withdrawSum += 102;
 
-    log.info(`WITHDRAW: ${withdrawSum}, BTT: ${Math.floor(withdrawSum / 1000000)}`)
+    log.info(`WITHDRAW: ${withdrawSum} (${Math.floor(withdrawSum / 1000000)})`)
     const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());
     log.info('RESULT:', result);
 };

@@ -1,5 +1,5 @@
-const WebTorrent = require('webtorrent');
-const client = new WebTorrent();
+// const WebTorrent = require('webtorrent');
+// const client = new WebTorrent();
 
 const addTorrent = async (torrent) => {
     // const magnetURI = '...'
