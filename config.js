@@ -65,7 +65,7 @@ module.exports = {
         // Выводить свой текущий баланс
         logBalance: true,
         // Адрес получения информации. На всякий случай.
-        url: '',
+        url: 'https://apilist.tronscan.org/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a',
     },
 
     /*
