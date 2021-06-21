@@ -3,42 +3,43 @@ const config = require('../../config');
 const log = require('../middleware/log');
 
 const lastData = {
-    amount: 0,
+    BtfsWalletBalance: 0,
+    BttWalletBalance: 0,
     balance: 0,
 }
 
 const scan = async () => {
-    const {port, url, amountLimit, minAmount, logBalance} = config.autoBttTransfer;
+    const {port, url, amountLimit, minAmount, logBalance, btfsPassword} = config.autoBttTransfer;
 
-    const token = await fetch(`http://127.0.0.1:${port}/api/token`).then(res => res.text());
-    const balance = await fetch(`http://127.0.0.1:${port}/api/status?t=${token}`)
-        .then(res => res.json())
-        .then(({balance}) => Math.floor(balance / 1000000));
+    const {
+        BtfsWalletBalance,
+        BttWalletBalance
+    } = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/balance`, {method: 'POST'})
+        .then(res => res.json());
 
-    if (logBalance && lastData.balance !== balance) {
-        lastData.balance = balance;
-        log.info(`${new Date().toLocaleString()}:\tBTT:`, balance);
+    if (logBalance && (lastData.BtfsWalletBalance !== BtfsWalletBalance || lastData.BttWalletBalance !== BttWalletBalance)) {
+        lastData.BtfsWalletBalance = BtfsWalletBalance;
+        lastData.BttWalletBalance = BttWalletBalance;
+        log.info(`${new Date().toLocaleString()}:\tIN-APP:`, BtfsWalletBalance, 'ON-CHAIN:', BttWalletBalance);
     }
-    // Проверка баланса, он должен быть больше 1001
-    if (balance < 1001) return;
+    // Проверка баланса, он должен быть больше 1001000000
+    if (BtfsWalletBalance < 1001000000) return;
 
     // Получаем баланс на шлюзе
     const {tokenBalances} = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
-    let {balance: amount} = tokenBalances.find(token => token.tokenId === '1002000');
-    amount = Math.floor(amount / 1000000)
+    let {balance} = tokenBalances.find(token => token.tokenId === '1002000');
 
-    if (logBalance && lastData.amount !== amount) {
-        lastData.amount = amount;
-        log.info(`${new Date().toLocaleString()}:\tAmount:`, amount);
+    if (logBalance && lastData.balance !== balance) {
+        lastData.balance = balance;
+        log.info(`${new Date().toLocaleString()}:\tAdmin BTT:`, balance);
     }
-    if (amount < minAmount || amount < 1001) return;
+    if (balance < minAmount || balance < 1001000000) return;
 
-    let withdrawSum = Math.min(amountLimit, balance, amount);
-    withdrawSum = (Math.floor(withdrawSum) - 1) * 1000000;
-    withdrawSum += 101;
+    let withdrawSum = Math.min(amountLimit, BtfsWalletBalance, balance);
+    withdrawSum += 102;
 
     log.info(`WITHDRAW: ${withdrawSum}, BTT: ${Math.floor(withdrawSum / 1000000)}`)
-    const result = await fetch(`http://127.0.0.1:${port}/api/exchange/withdrawal?t=${token}&amount=${withdrawSum}`, {method: 'POST'}).then(text => text.text());
+    const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());
     log.info('RESULT:', result);
 };
 
