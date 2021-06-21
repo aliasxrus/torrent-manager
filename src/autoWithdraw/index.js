@@ -35,9 +35,9 @@ const scan = async () => {
         lastData.balance = balance;
         log.info(`${new Date().toLocaleString()}: Admin BTT:`, balance, `[${Math.floor(balance / 1000000)}]`);
     }
-    if (balance < minAmount || balance < 1001000000) return;
+    if (balance < (minAmount * 1000000) || balance < 1001000000) return;
 
-    let withdrawSum = Math.min(amountLimit, BtfsWalletBalance, balance);
+    let withdrawSum = Math.min(amountLimit * 1000000, BtfsWalletBalance, balance);
     withdrawSum += 102;
 
     log.info(`${new Date().toLocaleString()}: WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
