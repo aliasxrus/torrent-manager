@@ -20,7 +20,9 @@ const scan = async () => {
     if (logBalance && (lastData.BtfsWalletBalance !== BtfsWalletBalance || lastData.BttWalletBalance !== BttWalletBalance)) {
         lastData.BtfsWalletBalance = BtfsWalletBalance;
         lastData.BttWalletBalance = BttWalletBalance;
-        log.info(`${new Date().toLocaleString()}:\tIN-APP:`, BtfsWalletBalance, 'ON-CHAIN:', BttWalletBalance);
+        log.info(`${new Date().toLocaleString()}:`,
+            'IN-APP:', BtfsWalletBalance, `[${Math.floor(BtfsWalletBalance / 1000000)}]`,
+            'ON-CHAIN:', BttWalletBalance, `[${Math.floor(BttWalletBalance / 1000000)}]`);
     }
     // Проверка баланса, он должен быть больше 1001000000
     if (BtfsWalletBalance < 1001000000) return;
@@ -31,16 +33,16 @@ const scan = async () => {
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
-        log.info(`${new Date().toLocaleString()}:\tAdmin BTT:`, balance);
+        log.info(`${new Date().toLocaleString()}: Admin BTT:`, balance, `[${Math.floor(balance / 1000000)}]`);
     }
     if (balance < minAmount || balance < 1001000000) return;
 
     let withdrawSum = Math.min(amountLimit, BtfsWalletBalance, balance);
     withdrawSum += 102;
 
-    log.info(`WITHDRAW: ${withdrawSum} (${Math.floor(withdrawSum / 1000000)})`)
+    log.info(`${new Date().toLocaleString()}: WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
     const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());
-    log.info('RESULT:', result);
+    log.info(`${new Date().toLocaleString()}: RESULT:`, result);
 };
 
 const scanning = async () => {
