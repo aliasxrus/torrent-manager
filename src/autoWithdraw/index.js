@@ -28,8 +28,15 @@ const scan = async () => {
     if (BtfsWalletBalance < 1001000000) return;
 
     // Получаем баланс на шлюзе
-    const {tokenBalances} = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
-    let {balance} = tokenBalances.find(token => token.tokenId === '1002000');
+    let tokenBalances;
+    try {
+        const result = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
+        tokenBalances = result.tokenBalances;
+    } catch (error) {
+        log.info(`${new Date().toLocaleString()}: ERROR: Ошибка получения баланса шлюза`);
+        return;
+    }
+    const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
@@ -38,6 +45,7 @@ const scan = async () => {
     if (balance < (minAmount * 1000000) || balance < 1001000000) return;
 
     let withdrawSum = Math.min(amountLimit * 1000000, BtfsWalletBalance, balance);
+    withdrawSum = Math.floor((withdrawSum - 1000000) / 1000000) * 1000000;
     withdrawSum += 102;
 
     log.info(`${new Date().toLocaleString()}: WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
