@@ -40,7 +40,7 @@ const scan = async () => {
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
-        log.info(`${new Date().toLocaleString()}: Admin BTT:`, balance, `[${Math.floor(balance / 1000000)}]`);
+        log.info(`${new Date().toLocaleString()}: SMART CONTRACT BTT:`, balance, `[${Math.floor(balance / 1000000)}]`);
     }
     if (balance < (minAmount * 1000000) || balance < 1001000000) return;
 
