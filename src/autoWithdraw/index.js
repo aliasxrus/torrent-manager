@@ -9,19 +9,20 @@ const lastData = {
 }
 
 const scan = async () => {
-    const {port, url, amountLimit, minAmount, logBalance, btfsPassword} = config.autoBttTransfer;
+    const {port, url, amountLimit, minAmount, logBalance, btfsPassword, minDifference} = config.autoBttTransfer;
 
     const {
         BtfsWalletBalance,
         BttWalletBalance
     } = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/balance`, {method: 'POST'})
         .then(res => res.json());
+    if (!BtfsWalletBalance) return;
 
     if (logBalance && (lastData.BtfsWalletBalance !== BtfsWalletBalance || lastData.BttWalletBalance !== BttWalletBalance)) {
         lastData.BtfsWalletBalance = BtfsWalletBalance;
         lastData.BttWalletBalance = BttWalletBalance;
         log.info('IN-APP:', BtfsWalletBalance, `[${Math.floor(BtfsWalletBalance / 1000000)}]`,
-                 'ON-CHAIN:', BttWalletBalance, `[${Math.floor(BttWalletBalance / 1000000)}]`);
+            'ON-CHAIN:', BttWalletBalance, `[${Math.floor(BttWalletBalance / 1000000)}]`);
     }
     // Проверка баланса, он должен быть больше 1001000000
     if (BtfsWalletBalance < 1001000000) return;
@@ -36,6 +37,7 @@ const scan = async () => {
         return;
     }
     const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
+    if (!balance || minDifference < (balance - lastData.balance)) return;
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
