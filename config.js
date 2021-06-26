@@ -24,8 +24,14 @@ module.exports = {
         unknown: {major: 0, minor: 0},
     },
 
+    // Останавливает активные загрузки
     stopActiveDownloads: true,
+    // Автоматически скачивает добавленные торренты и запускает раздачу
     autoDownload: true,
+    // Лимит времени на закачку в минутах, останавливает и удаляет загруженные файлы.
+    autoDownloadTimeOut: 240,
+    // Удаляет закачку из торрент клиента. По достижении autoDownloadTimeOut или ошибки при скачивании.
+    autoDownloadDeleteTorrentFile: true,
 
     /*
     * Расположение торрент клиента. На текущий момент только для работы с ipfilter.dat

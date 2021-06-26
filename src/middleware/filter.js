@@ -3,6 +3,7 @@ const apiTorrent = require('./api/torrent');
 const {findIpFilterPath} = require('./child_process');
 const {setIpFilterPath, getIpFilterPath} = require('./fs');
 const {addIpToFilter} = require('./fs');
+const webTorrent = require('../webTorrent');
 const log = require('./log');
 
 const version = (clientName) => {
@@ -34,7 +35,7 @@ const blockPeers = async (peers) => {
             !filterUnknown(peer) &&
             !blockedIp.includes(peer.ip)
         ) {
-            log.info(`${new Date().toLocaleString()}:\tBlock`, peer.ip, peer.client);
+            log.info('Block', peer.ip, peer.client);
             await addIpToFilter(peer.ip);
             blockedIp.push(peer.ip);
         }
@@ -52,13 +53,46 @@ const parsePeersArray = async (peersArray) => {
     return peers;
 };
 
+const stopActiveDownloads = async (torrents) => {
+    const seedingTorrents = [];
+
+    for (let i = 0; i < torrents.length; i++) {
+        if (torrents[i].statusText.startsWith('Downloading metadata')) continue;
+
+        if (torrents[i].statusText.startsWith('Seeding')) {
+            seedingTorrents.push(torrents[i]);
+            continue;
+        }
+
+        if (torrents[i].statusText.startsWith('Downloading')) {
+            await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
+            await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
+            await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
+            continue;
+        }
+
+        if (config.autoDownload && torrents[i].statusText.startsWith('Stopped')) {
+            await webTorrent.addTorrent(torrents[i]);
+        }
+    }
+
+    return seedingTorrents;
+}
+
 const scan = async () => {
     if (!await getIpFilterPath()) {
         const ipFilterPath = await findIpFilterPath();
         await setIpFilterPath(ipFilterPath);
     }
 
-    const peersArray = await apiTorrent.getPeers();
+    let torrents =  await apiTorrent.getTorrents();
+
+    // Останавливаем загружающиеся и начинаем закачку сами
+    if (config.stopActiveDownloads) {
+        torrents = await stopActiveDownloads(torrents);
+    }
+
+    const peersArray = await apiTorrent.getPeers(torrents);
     const peers = await parsePeersArray(peersArray);
     await blockPeers(peers);
 }

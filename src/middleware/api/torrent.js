@@ -4,7 +4,6 @@ const {JSDOM} = jsdom;
 const {unescape} = require('html-escaper');
 const log = require('../log');
 const config = require('../../../config');
-const webTorrent = require('../../webTorrent');
 
 let token;
 
@@ -72,38 +71,15 @@ const setTorrentLabel = async (hash, label) => {
 };
 
 const controlTorrent = async (hash, action) => {
-    // action: start, pause, stop
+    log.info('API Action', action, 'hash:', hash);
+    // actions: start, pause, stop, recheck
     await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=${action}&list=1&hash=${hash}`);
 };
-
-const stopActiveDownloads = async (torrents) => {
-    const seedingTorrents = [];
-
-    for (let i = 0; i < torrents.length; i++) {
-        if (torrents[i].statusText.startsWith('Seeding')) {
-            seedingTorrents.push(torrents[i]);
-            continue;
-        }
-
-        if (torrents[i].statusText.startsWith('Downloading')) {
-            await controlTorrent(torrents[i].hash, 'stop');
-            await setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
-            continue;
-        }
-
-        if (config.autoDownload && torrents[i].statusText.startsWith('Stopped')) {
-            await webTorrent.addTorrent(torrents[i]);
-            await setTorrentLabel(torrents[i].hash, `TM: В обработке... [${new Date().toLocaleTimeString()}]`);
-        }
-    }
-
-    return seedingTorrents;
-}
 
 const getTorrents = async () => {
     const {torrents: torrentsArray} = await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?list=1`);
 
-    let torrents = torrentsArray.map(el => {
+    return torrentsArray.map(el => {
         return {
             hash: el[0], // string
             status: el[1], // integer: 1 = Started, 2 = Checking, 4 = Start after check, 8 = Checked, 16 = Error, 32 = Paused, 64 = Queued, 128 = Loaded
@@ -137,18 +113,9 @@ const getTorrents = async () => {
             u28: el[28], // string - хеш?
         };
     });
-
-    // Останавливаем загружающиеся и начинаем закачку сами
-    if (config.stopActiveDownloads) {
-        torrents = await stopActiveDownloads(torrents);
-    }
-
-    return torrents;
 };
 
-const getPeers = async () => {
-    const torrents =  await getTorrents();
-
+const getPeers = async (torrents) => {
     const allPeers = [];
     while (torrents.length) {
         const hashArray = torrents.splice(0, 20).map(value => `&hash=${value.hash}`).join('');
@@ -160,9 +127,12 @@ const getPeers = async () => {
 };
 
 module.exports = {
+    getTorrents,
     getToken,
     getPeers,
     requestWithToken,
+    setTorrentLabel,
+    controlTorrent,
 };
 
 
