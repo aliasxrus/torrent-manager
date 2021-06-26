@@ -9,7 +9,7 @@ const lastData = {
 }
 
 const scan = async () => {
-    const {port, url, amountLimit, minAmount, logBalance, btfsPassword, minDifference} = config.autoBttTransfer;
+    const {port, url, amountLimit, minAmount, logBalance, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
 
     const {
         BtfsWalletBalance,
@@ -37,7 +37,7 @@ const scan = async () => {
         return;
     }
     const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
-    if (!balance || minDifference < (balance - lastData.balance)) return;
+    if (!balance || (minDifferenceEnabled && minDifference < (balance - lastData.balance))) return;
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
