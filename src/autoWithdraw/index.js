@@ -37,7 +37,11 @@ const scan = async () => {
         return;
     }
     const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
-    if (!balance || (minDifferenceEnabled && minDifference < (balance - lastData.balance))) return;
+    if (!balance) return;
+    if (minDifferenceEnabled && balance - lastData.balance < minDifference * 1000000) {
+        lastData.balance = balance;
+        return;
+    }
 
     if (logBalance && lastData.balance !== balance) {
         lastData.balance = balance;
@@ -47,7 +51,7 @@ const scan = async () => {
 
     let withdrawSum = Math.min(amountLimit * 1000000, BtfsWalletBalance, balance);
     withdrawSum = Math.floor((withdrawSum - 1000000) / 1000000) * 1000000;
-    withdrawSum += 102;
+    withdrawSum += 103;
 
     log.info(`WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
     const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());
