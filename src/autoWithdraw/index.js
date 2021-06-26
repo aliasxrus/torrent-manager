@@ -38,7 +38,7 @@ const scan = async () => {
     }
     const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
     if (!balance) return;
-    if (minDifferenceEnabled && balance - lastData.balance < minDifference * 1000000) {
+    if (minDifferenceEnabled && lastData.balance - balance < minDifference * 1000000) {
         lastData.balance = balance;
         return;
     }
