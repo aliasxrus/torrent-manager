@@ -53,7 +53,7 @@ const parsePeersArray = async (peersArray) => {
     return peers;
 };
 
-const stopActiveDownloads = async (torrents) => {
+const checkTorrents = async (torrents) => {
     const seedingTorrents = [];
 
     for (let i = 0; i < torrents.length; i++) {
@@ -89,7 +89,7 @@ const scan = async () => {
 
     // Останавливаем загружающиеся и начинаем закачку сами
     if (config.stopActiveDownloads) {
-        torrents = await stopActiveDownloads(torrents);
+        torrents = await checkTorrents(torrents);
     }
 
     const peersArray = await apiTorrent.getPeers(torrents);

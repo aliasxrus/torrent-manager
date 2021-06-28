@@ -70,8 +70,18 @@ const setTorrentLabel = async (hash, label) => {
     await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setprops&s=label&hash=${hash}&v=${encodeURIComponent(label)}`);
 };
 
+/*
+* Actions:
+* start - запуск
+* pause - поставить на паузу
+* stop - полная остановка
+* recheck - перепроверить хеш файлов
+* removetorrent - удалить только торрент
+* removedatatorrent - удалить торрент и файлы
+* removedata - удалить только файлы
+* */
 const controlTorrent = async (hash, action) => {
-    log.info('API Action', action, 'hash:', hash);
+    log.info(`API Action "${action}", hash: ${hash}`);
     // actions: start, pause, stop, recheck
     await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=${action}&list=1&hash=${hash}`);
 };
