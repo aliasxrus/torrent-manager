@@ -3,7 +3,9 @@ const {autoDownloadTimeOut, autoDownloadDeleteTorrentFile} = require('../../conf
 const {setTorrentLabel, controlTorrent} = require('../middleware/api/torrent');
 const WebTorrent = require('webtorrent-hybrid');
 WebTorrent.setMaxListeners(Infinity);
-const client = new WebTorrent();
+const client = new WebTorrent({
+    utp: false,
+});
 
 client.on('error', function (error) {
     log.info(error);

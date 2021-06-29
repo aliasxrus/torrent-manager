@@ -57,21 +57,24 @@ const checkTorrents = async (torrents) => {
     const seedingTorrents = [];
 
     for (let i = 0; i < torrents.length; i++) {
+        const {status, state, forced} = torrents[i].status;
+        log.info(status, state, forced, torrents[i].statusText);
+        // todo Отсеивать уже скачанное, сейчас идёт оставновка
         if (torrents[i].statusText.startsWith('Downloading metadata')) continue;
 
-        if (torrents[i].statusText.startsWith('Seeding')) {
+        if (state === 'SEEDING') {
             seedingTorrents.push(torrents[i]);
             continue;
         }
 
-        if (torrents[i].statusText.startsWith('Downloading')) {
+        if (state === 'DOWNLOADING') {
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
             await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
             continue;
         }
 
-        if (config.autoDownload && torrents[i].statusText.startsWith('Stopped')) {
+        if (config.autoDownload && state === 'STOPPED') {
             await webTorrent.addTorrent(torrents[i]);
         }
     }

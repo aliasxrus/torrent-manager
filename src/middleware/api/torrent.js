@@ -5,6 +5,12 @@ const {unescape} = require('html-escaper');
 const log = require('../log');
 const config = require('../../../config');
 
+const STATE_STARTED = 1;
+const STATE_CHECKING = 2;
+const STATE_ERROR = 16;
+const STATE_PAUSED = 32;
+const STATE_QUEUED = 64;
+
 let token;
 
 const getToken = async () => {
@@ -92,7 +98,7 @@ const getTorrents = async () => {
     return torrentsArray.map(el => {
         return {
             hash: el[0], // string
-            status: el[1], // integer: 1 = Started, 2 = Checking, 4 = Start after check, 8 = Checked, 16 = Error, 32 = Paused, 64 = Queued, 128 = Loaded
+            status: getStatusInfo(el[1], el[4]), // 1 = Started, 2 = Checking, 4 = Start after check, 8 = Checked, 16 = Error, 32 = Paused, 64 = Queued, 128 = Loaded
             name: el[2], // string
             size: el[3], // integer in bytes
             percentProgress: el[4], // integer in per mils (100% = 1000)
@@ -135,6 +141,54 @@ const getPeers = async (torrents) => {
 
     return allPeers;
 };
+
+/*
+* CHECKED - "Проверено %:.1d%%"
+* PAUSED - "Пауза"
+* SEEDING - "Раздается"
+* DOWNLOADING - "Загружается"
+* ERROR - "Ошибка! %s"
+* QUEUED_SEED - "Ожидает раздачи"
+* QUEUED - "В очереди"
+* FINISHED - "Загружен"
+* STOPPED - "Остановлен"
+* */
+const getStatusInfo = (status, percentProgress) => {
+    const statusInfo = {forced: false};
+
+    if (status & STATE_PAUSED) {
+        statusInfo.status = 'Status_Paused';
+        statusInfo.state = (status & STATE_CHECKING) ? 'CHECKED' : 'PAUSED';
+    } else {
+        const complete = percentProgress === 1000;
+
+        if (status & STATE_STARTED) {
+            statusInfo.status = complete ? 'Status_Up' : 'Status_Down';
+            statusInfo.state = complete ? 'SEEDING' : 'DOWNLOADING';
+            statusInfo.forced = !(status & STATE_QUEUED);
+        } else {
+            if (status & STATE_CHECKING) {
+                statusInfo.status = 'Status_Checking';
+                statusInfo.state = 'CHECKED';
+            } else {
+                if (status & STATE_ERROR) {
+                    statusInfo.status = 'Status_Error';
+                    statusInfo.state = 'ERROR';
+                } else {
+                    if (status & STATE_QUEUED) {
+                        statusInfo.status = complete ? 'Status_Queued_Up' : 'Status_Queued_Down';
+                        statusInfo.state = complete ? 'QUEUED_SEED' : 'QUEUED';
+                    } else {
+                        statusInfo.status = complete ? 'Status_Completed' : 'Status_Incomplete';
+                        statusInfo.state = complete ? 'FINISHED' : 'STOPPED';
+                    }
+                }
+            }
+        }
+    }
+
+    return statusInfo;
+}
 
 module.exports = {
     getTorrents,
