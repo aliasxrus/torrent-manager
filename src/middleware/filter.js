@@ -60,7 +60,7 @@ const checkTorrents = async (torrents) => {
         const {status, state, forced} = torrents[i].status;
         log.info(status, state, forced, torrents[i].statusText);
         // todo Отсеивать уже скачанное, сейчас идёт оставновка
-        if (torrents[i].statusText.startsWith('Downloading metadata')) continue;
+        if (['CHECKED'].includes(state) || torrents[i].statusText.startsWith('Downloading metadata')) continue;
 
         if (state === 'SEEDING') {
             seedingTorrents.push(torrents[i]);
@@ -68,6 +68,7 @@ const checkTorrents = async (torrents) => {
         }
 
         if (state === 'DOWNLOADING') {
+            log.info('########### DOWNLOADING ########### STOP');
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
             await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=torrents_start_stopped&v=1`);

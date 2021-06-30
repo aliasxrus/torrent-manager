@@ -12,6 +12,7 @@ client.on('error', function (error) {
 })
 
 const addTorrent = async ({hash, downloadDir, name}) => {
+    // todo Проверять список загрузок, если есть лишние то удалять
     if (client.get(hash)) {
         return refreshTorrentInfo(hash);
     }

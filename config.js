@@ -32,6 +32,10 @@ module.exports = {
     autoDownloadTimeOut: 240,
     // Удаляет закачку из торрент клиента. По достижении autoDownloadTimeOut или ошибки при скачивании.
     autoDownloadDeleteTorrentFile: true,
+    // Интервал получения новых торрентов на закачку в минутах
+    downloadInterval: 10,
+    // Минимальное количество BTT в час, если меньше то удаляет все торренты и загружает свежие
+    downloadMinBtt: 10,
 
     /*
     * Расположение торрент клиента. На текущий момент только для работы с ipfilter.dat
