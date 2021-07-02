@@ -58,17 +58,19 @@ const checkTorrents = async (torrents) => {
 
     for (let i = 0; i < torrents.length; i++) {
         const {status, state, forced} = torrents[i].status;
-        log.info(status, state, forced, torrents[i].statusText);
-        // todo Отсеивать уже скачанное, сейчас идёт оставновка
-        if (['CHECKED'].includes(state) || torrents[i].statusText.startsWith('Downloading metadata')) continue;
 
         if (state === 'SEEDING') {
             seedingTorrents.push(torrents[i]);
             continue;
         }
 
-        if (state === 'DOWNLOADING') {
-            log.info('########### DOWNLOADING ########### STOP');
+        if (
+            ['CHECKED'].includes(state) ||
+            torrents[i].statusText.startsWith('Downloading metadata') ||
+            torrents[i].statusText.startsWith('Connecting to peers')
+        ) continue;
+
+        if (state === 'DOWNLOADING' && !torrents[i].label.startsWith('TM: Downloaded')) {
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
             await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
@@ -89,7 +91,7 @@ const scan = async () => {
         await setIpFilterPath(ipFilterPath);
     }
 
-    let torrents =  await apiTorrent.getTorrents();
+    let torrents = await apiTorrent.getTorrents();
 
     // Останавливаем загружающиеся и начинаем закачку сами
     if (config.stopActiveDownloads) {

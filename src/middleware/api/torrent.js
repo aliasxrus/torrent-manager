@@ -88,7 +88,6 @@ const setTorrentLabel = async (hash, label) => {
 * */
 const controlTorrent = async (hash, action) => {
     log.info(`API Action "${action}", hash: ${hash}`);
-    // actions: start, pause, stop, recheck
     await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=${action}&list=1&hash=${hash}`);
 };
 

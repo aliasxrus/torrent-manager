@@ -1,6 +1,6 @@
 const log = require('../middleware/log');
-const {autoDownloadTimeOut, autoDownloadDeleteTorrentFile} = require('../../config');
-const {setTorrentLabel, controlTorrent} = require('../middleware/api/torrent');
+const {autoDownloadTimeOut, autoDownloadDeleteTorrentFile, apiTorrentUrl, port} = require('../../config');
+const {setTorrentLabel, controlTorrent, requestWithToken} = require('../middleware/api/torrent');
 const WebTorrent = require('webtorrent-hybrid');
 WebTorrent.setMaxListeners(Infinity);
 const client = new WebTorrent({
@@ -21,12 +21,19 @@ const addTorrent = async ({hash, downloadDir, name}) => {
 };
 
 const downloadTorrent = async (hash, downloadDir, name = '') => {
-    // todo Путь до папки
+    if (downloadDir.endsWith(name)) {
+        downloadDir = downloadDir.substring(0, downloadDir.length - name.length);
+    }
+
+    const {settings} = await requestWithToken(`${apiTorrentUrl}:${port}/gui/?action=getsettings`);
+    const path = settings.find(key => key[0] === 'dir_active_download')[2] || downloadDir;
+
+    log.info(`Preparing to download:`, name, hash, path);
     client.add(`magnet:?xt=urn:btih:${hash}`, {
         // announce: [String],        // Torrent trackers to use (added to list in .torrent or magnet uri)
         // getAnnounceOpts: Function, // Custom callback to allow sending extra parameters to the tracker
         // maxWebConns: Number,       // Max number of simultaneous connections per web seed [default=4]
-        path: downloadDir,            // Folder to download files to (default=`/tmp/webtorrent/`)
+        path,            // Folder to download files to (default=`/tmp/webtorrent/`)
         // path: './wt_tmp',              // Folder to download files to (default=`/tmp/webtorrent/`)
         // private: Boolean,          // If true, client will not share the hash with the DHT nor with PEX (default is the privacy of the parsed torrent)
         // store: Function            // Custom chunk store (must follow [abstract-chunk-store](https://www.npmjs.com/package/abstract-chunk-store) API)
@@ -62,10 +69,14 @@ const refreshTorrentInfo = async (hash) => {
 };
 
 const finishDownloadTorrent = async (torrent) => {
-    await setTorrentLabel(torrent.infoHash, `TM: Загружен, обработка... [${new Date().toLocaleTimeString()}]`);
+    // todo проверять наличие в клиенте, если нет то удалять
+
+    await setTorrentLabel(torrent.infoHash, `TM: Downloaded. Загружен, обработка... [${new Date().toLocaleTimeString()}]`);
+
+    await controlTorrent(torrent.infoHash, 'recheck');
     await controlTorrent(torrent.infoHash, 'start');
 
-    torrent.destroy({destroyStore: false}, () => {
+    client.remove(torrent.infoHash, {destroyStore: false}, () => {
         log.info(`Downloaded:`, torrent.name, torrent.infoHash, torrent.path);
     });
 };
