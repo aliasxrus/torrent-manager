@@ -12,7 +12,6 @@ client.on('error', function (error) {
 })
 
 const addTorrent = async ({hash, downloadDir, name}) => {
-    // todo Проверять список загрузок, если есть лишние то удалять
     if (client.get(hash)) {
         return refreshTorrentInfo(hash);
     }
@@ -54,7 +53,7 @@ const refreshTorrentInfo = async (hash) => {
 
     if (!torrent.startTime) torrent.startTime = new Date();
     if (new Date().getTime() - torrent.startTime.getTime() > autoDownloadTimeOut * 60 * 1000) {
-        torrent.destroy({destroyStore: true}, () => {
+        client.remove(torrent.infoHash, {destroyStore: true}, () => {
             log.info(`Download timeout, torrent destroyed:`, torrent.name, torrent.infoHash, torrent.path);
         });
         await controlTorrent(torrent.infoHash, autoDownloadDeleteTorrentFile ? 'removedatatorrent' : 'removedata');
@@ -70,8 +69,6 @@ const refreshTorrentInfo = async (hash) => {
 };
 
 const finishDownloadTorrent = async (torrent) => {
-    // todo проверять наличие в клиенте, если нет то удалять
-
     await setTorrentLabel(torrent.infoHash, `TM: Downloaded. Загружен, обработка... [${new Date().toLocaleTimeString()}]`);
 
     await controlTorrent(torrent.infoHash, 'recheck');
@@ -82,6 +79,19 @@ const finishDownloadTorrent = async (torrent) => {
     });
 };
 
+const checkTorrentsOnClient = async (uTorrents) => {
+    client.torrents.forEach(wTorrent => {
+        const uTorrent = uTorrents.find(el => el.hash.toLowerCase() === wTorrent.infoHash.toLowerCase());
+
+        if (!uTorrent) {
+            client.remove(wTorrent.infoHash, {destroyStore: true}, () => {
+                log.info(`Torrent not found, torrent destroyed:`, wTorrent.name, wTorrent.infoHash, wTorrent.path);
+            });
+        }
+    });
+};
+
 module.exports = {
     addTorrent,
+    checkTorrentsOnClient,
 };

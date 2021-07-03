@@ -56,6 +56,8 @@ const parsePeersArray = async (peersArray) => {
 const checkTorrents = async (torrents) => {
     const seedingTorrents = [];
 
+    await webTorrent.checkTorrentsOnClient(torrents);
+
     for (let i = 0; i < torrents.length; i++) {
         const {status, state, forced} = torrents[i].status;
 
