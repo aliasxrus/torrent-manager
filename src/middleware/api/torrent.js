@@ -41,13 +41,13 @@ const getToken = async () => {
     }
 };
 
-const requestWithToken = async (url) => {
+const requestWithToken = async (path) => {
     if (!token) {
         token = await getToken();
     }
 
     try {
-        return fetch(url + `&token=${token}`,
+        return fetch(`${config.apiTorrentUrl}:${config.port}`+ path + `&token=${token}`,
             {
                 headers: {
                     Cookie: config.guid,
@@ -71,9 +71,9 @@ const requestWithToken = async (url) => {
 
 const setTorrentLabel = async (hash, label) => {
     // Удаление старой метки
-    await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setprops&s=label&hash=${hash}&v=`);
+    await requestWithToken(`/gui/?action=setprops&s=label&hash=${hash}&v=`);
     // Добавление новой метки
-    await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setprops&s=label&hash=${hash}&v=${encodeURIComponent(label)}`);
+    await requestWithToken(`/gui/?action=setprops&s=label&hash=${hash}&v=${encodeURIComponent(label)}`);
 };
 
 /*
@@ -88,11 +88,11 @@ const setTorrentLabel = async (hash, label) => {
 * */
 const controlTorrent = async (hash, action) => {
     log.info(`API Action "${action}", hash: ${hash}`);
-    await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=${action}&list=1&hash=${hash}`);
+    await requestWithToken(`/gui/?action=${action}&list=1&hash=${hash}`);
 };
 
 const getTorrents = async () => {
-    const {torrents: torrentsArray} = await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?list=1`);
+    const {torrents: torrentsArray} = await requestWithToken(`/gui/?list=1`);
 
     return torrentsArray.map(el => {
         return {
@@ -134,7 +134,7 @@ const getPeers = async (torrents) => {
     const allPeers = [];
     while (torrents.length) {
         const hashArray = torrents.splice(0, 20).map(value => `&hash=${value.hash}`).join('');
-        const {peers: peersData} = await requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=getpeers${hashArray}`);
+        const {peers: peersData} = await requestWithToken(`/gui/?action=getpeers${hashArray}`);
         allPeers.push(...peersData);
     }
 

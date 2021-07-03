@@ -41,7 +41,7 @@ const blockPeers = async (peers) => {
         }
     }
 
-    await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=ipfilter.enable&v=1`);
+    await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };
 
 const parsePeersArray = async (peersArray) => {
@@ -73,7 +73,7 @@ const checkTorrents = async (torrents) => {
         if (state === 'DOWNLOADING' && !torrents[i].label.startsWith('TM: Downloaded')) {
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
-            await apiTorrent.requestWithToken(`${config.apiTorrentUrl}:${config.port}/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
+            await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
             continue;
         }
 

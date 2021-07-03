@@ -1,5 +1,5 @@
 const log = require('../middleware/log');
-const {autoDownloadTimeOut, autoDownloadDeleteTorrentFile, apiTorrentUrl, port} = require('../../config');
+const {autoDownloadTimeOut, autoDownloadDeleteTorrentFile} = require('../../config');
 const {setTorrentLabel, controlTorrent, requestWithToken} = require('../middleware/api/torrent');
 const WebTorrent = require('webtorrent-hybrid');
 WebTorrent.setMaxListeners(Infinity);
@@ -25,7 +25,7 @@ const downloadTorrent = async (hash, downloadDir, name = '') => {
         downloadDir = downloadDir.substring(0, downloadDir.length - name.length);
     }
 
-    const {settings} = await requestWithToken(`${apiTorrentUrl}:${port}/gui/?action=getsettings`);
+    const {settings} = await requestWithToken(`/gui/?action=getsettings`);
     const path = settings.find(key => key[0] === 'dir_active_download')[2] || downloadDir;
 
     log.info(`Preparing to download:`, name, hash, path);
@@ -39,7 +39,7 @@ const downloadTorrent = async (hash, downloadDir, name = '') => {
         // store: Function            // Custom chunk store (must follow [abstract-chunk-store](https://www.npmjs.com/package/abstract-chunk-store) API)
         // destroyStoreOnDestroy: Boolean // If truthy, client will delete the torrent's chunk store (e.g. files on disk) when the torrent is destroyed
     }, (torrent) => {
-        torrent.startTime = new Date();
+        if (!torrent.startTime) torrent.startTime = new Date();
         log.info(`Torrent downloading:`, torrent.name, torrent.infoHash, torrent.path);
         setTorrentLabel(torrent.infoHash, `TM: Начинаем скачивание... [${new Date().toLocaleTimeString()}]`);
     });
@@ -48,19 +48,20 @@ const downloadTorrent = async (hash, downloadDir, name = '') => {
 const refreshTorrentInfo = async (hash) => {
     const torrent = client.get(hash);
 
-    if (!torrent.ready) {
-        return setTorrentLabel(torrent.infoHash, `TM: Подготовка к скачиванию... [${new Date().toLocaleTimeString()}]`);
-    }
-
     if (torrent.done) {
         return finishDownloadTorrent(torrent);
     }
 
+    if (!torrent.startTime) torrent.startTime = new Date();
     if (new Date().getTime() - torrent.startTime.getTime() > autoDownloadTimeOut * 60 * 1000) {
         torrent.destroy({destroyStore: true}, () => {
             log.info(`Download timeout, torrent destroyed:`, torrent.name, torrent.infoHash, torrent.path);
         });
         await controlTorrent(torrent.infoHash, autoDownloadDeleteTorrentFile ? 'removedatatorrent' : 'removedata');
+    }
+
+    if (!torrent.ready) {
+        return setTorrentLabel(torrent.infoHash, `TM: Подготовка к скачиванию... [${new Date().toLocaleTimeString()}]`);
     }
 
     const progress = (torrent.progress * 100).toFixed(2);
