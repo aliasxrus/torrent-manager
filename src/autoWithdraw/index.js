@@ -31,7 +31,7 @@ const scan = async () => {
     let tokenBalances;
     try {
         const result = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
-        tokenBalances = result.tokenBalances;
+        tokenBalances = result.withPriceTokens;
     } catch (error) {
         log.info('ERROR: Ошибка получения баланса шлюза');
         return;
