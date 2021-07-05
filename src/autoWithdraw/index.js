@@ -14,7 +14,7 @@ const getUserBtfsBalance = async () => {
         BttWalletBalance: userBttBalance,
     } = await fetch(`http://127.0.0.1:${config.autoBttTransfer.port}/api/v1/wallet/balance`, {method: 'POST'})
         .then(res => res.json());
-    if (!userBtfsBalance || !userBttBalance) return -1;
+    if (!userBtfsBalance) return -1;
 
     if (lastData.userBtfsBalance !== userBtfsBalance || lastData.userBttBalance !== userBttBalance) {
         lastData.userBtfsBalance = userBtfsBalance;
