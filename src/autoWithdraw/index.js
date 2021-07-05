@@ -80,7 +80,7 @@ const scanning = async () => {
 };
 
 const run = async () => {
-    log.info(`AUTO WITHDRAW: ON\nSCAN INTERVAL: ${config.autoBttTransfer.interval} ms\n`);
+    log.info(`AUTO WITHDRAW: ON\nSCAN INTERVAL: ${config.autoBttTransfer.interval} ms\n\n\n\n`);
 
     scanning();
 };
