@@ -1,7 +1,7 @@
 const {debugLog} = require('../../config');
 
 const info = (...str) => {
-    console.log(...str);
+    console.log(`${new Date().toLocaleString()}:\t`, ...str);
 };
 
 const debug = (...str) => {
