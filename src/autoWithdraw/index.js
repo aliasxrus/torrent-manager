@@ -3,55 +3,66 @@ const config = require('../../config');
 const log = require('../middleware/log');
 
 const lastData = {
-    BtfsWalletBalance: 0,
-    BttWalletBalance: 0,
-    balance: 0,
+    userBtfsBalance: 0,
+    userBttBalance: 0,
+    smartContractBalance: 0,
 }
 
-const scan = async () => {
-    const {port, url, amountLimit, minAmount, logBalance, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
-
+const getUserBtfsBalance = async () => {
     const {
-        BtfsWalletBalance,
-        BttWalletBalance
-    } = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/balance`, {method: 'POST'})
+        BtfsWalletBalance: userBtfsBalance,
+        BttWalletBalance: userBttBalance,
+    } = await fetch(`http://127.0.0.1:${config.autoBttTransfer.port}/api/v1/wallet/balance`, {method: 'POST'})
         .then(res => res.json());
-    if (!BtfsWalletBalance) return;
+    if (!userBtfsBalance || !userBttBalance) return -1;
 
-    if (logBalance && (lastData.BtfsWalletBalance !== BtfsWalletBalance || lastData.BttWalletBalance !== BttWalletBalance)) {
-        lastData.BtfsWalletBalance = BtfsWalletBalance;
-        lastData.BttWalletBalance = BttWalletBalance;
-        log.info('IN-APP:', BtfsWalletBalance, `[${Math.floor(BtfsWalletBalance / 1000000)}]`,
-            'ON-CHAIN:', BttWalletBalance, `[${Math.floor(BttWalletBalance / 1000000)}]`);
+    if (lastData.userBtfsBalance !== userBtfsBalance || lastData.userBttBalance !== userBttBalance) {
+        lastData.userBtfsBalance = userBtfsBalance;
+        lastData.userBttBalance = userBttBalance;
+        log.balance('IN-APP:', userBtfsBalance, `[${Math.floor(userBtfsBalance / 1000000)}]`,
+            'ON-CHAIN:', userBttBalance, `[${Math.floor(userBttBalance / 1000000)}]`);
     }
-    // Проверка баланса, он должен быть больше 1001000000
-    if (BtfsWalletBalance < 1001000000) return;
 
-    // Получаем баланс на шлюзе
-    let tokenBalances;
+    return userBtfsBalance;
+};
+
+const getSmartContractBalance = async () => {
     try {
-        const result = await fetch(url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a').then(text => text.json());
-        tokenBalances = result.withPriceTokens;
+        const result = await fetch(config.autoBttTransfer.url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a')
+            .then(text => text.json());
+
+        const {balance: smartContractBalance} = (result.withPriceTokens || result.tokenBalances)
+            .find(token => token.tokenId === '1002000');
+
+        if (lastData.smartContractBalance !== smartContractBalance) {
+            lastData.smartContractBalance = smartContractBalance;
+            log.balance('SMART CONTRACT BTT:', smartContractBalance, `[${Math.floor(smartContractBalance / 1000000)}]`);
+        }
+
+        return smartContractBalance || -1;
     } catch (error) {
         log.info('ERROR: Ошибка получения баланса шлюза');
-        return;
+        return -1;
     }
-    const {balance} = tokenBalances.find(token => token.tokenId === '1002000');
-    if (!balance) return;
-    if (minDifferenceEnabled && lastData.balance - balance < minDifference * 1000000) {
-        lastData.balance = balance;
-        return;
-    }
+};
 
-    if (logBalance && lastData.balance !== balance) {
-        lastData.balance = balance;
-        log.info('SMART CONTRACT BTT:', balance, `[${Math.floor(balance / 1000000)}]`);
-    }
-    if (balance < (minAmount * 1000000) || balance < 1001000000) return;
+const scan = async () => {
+    const {port, amountLimit, minAmount, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
 
-    let withdrawSum = Math.min(amountLimit * 1000000, BtfsWalletBalance, balance);
-    withdrawSum = Math.floor((withdrawSum - 1000000) / 1000000) * 1000000;
-    withdrawSum += 103;
+    const userBtfsBalance = await getUserBtfsBalance();
+    const smartContractBalance = await getSmartContractBalance();
+
+    if (
+        (minAmount * 1000000) > smartContractBalance ||
+        1001000000 > smartContractBalance ||
+        1001000000 > userBtfsBalance
+    ) return;
+
+    if (minDifferenceEnabled && minDifference * 1000000 > lastData.smartContractBalance - smartContractBalance) return;
+
+    let withdrawSum = Math.min(amountLimit * 1000000, userBtfsBalance, smartContractBalance);
+    withdrawSum = Math.floor((withdrawSum - 1000) / 1000) * 1000;
+    withdrawSum += 104;
 
     log.info(`WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
     const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());

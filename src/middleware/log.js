@@ -1,4 +1,4 @@
-const {debugLog} = require('../../config');
+const {debugLog, autoBttTransfer: {logBalance}} = require('../../config');
 
 const info = (...str) => {
     console.log(`${new Date().toLocaleString()}:\t`, ...str);
@@ -10,7 +10,14 @@ const debug = (...str) => {
     }
 };
 
+const balance = (...str) => {
+    if (logBalance) {
+        info(...str);
+    }
+};
+
 module.exports = {
     info,
-    debug
+    debug,
+    balance,
 };
