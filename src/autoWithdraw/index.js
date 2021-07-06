@@ -47,6 +47,7 @@ const getSmartContractBalance = async () => {
 };
 
 const scan = async () => {
+    const smartContractBalancePrevious = lastData.smartContractBalance;
     const {port, amountLimit, minAmount, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
 
     const userBtfsBalance = await getUserBtfsBalance();
@@ -58,7 +59,7 @@ const scan = async () => {
         1001000000 > userBtfsBalance
     ) return;
 
-    if (minDifferenceEnabled && minDifference * 1000000 > lastData.smartContractBalance - smartContractBalance) return;
+    if (minDifferenceEnabled && minDifference * 1000000 > smartContractBalancePrevious - smartContractBalance) return;
 
     let withdrawSum = Math.min(amountLimit * 1000000, userBtfsBalance, smartContractBalance);
     withdrawSum = Math.floor((withdrawSum - 1000) / 1000) * 1000;
