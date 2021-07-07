@@ -66,7 +66,7 @@ const scan = async () => {
     withdrawSum += 104;
 
     log.info(`WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
-    const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${btfsPassword}`, {method: 'POST'}).then(text => text.text());
+    const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${encodeURIComponent(btfsPassword)}`, {method: 'POST'}).then(text => text.text());
     log.info('RESULT:', result);
 };
 
