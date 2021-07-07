@@ -81,7 +81,15 @@ const scanning = async () => {
 };
 
 const run = async () => {
+    const {port, btfsPassword} = config.autoBttTransfer;
     log.info(`AUTO WITHDRAW: ON\nSCAN INTERVAL: ${config.autoBttTransfer.interval} ms\n\n\n\n`);
+
+    const {Message} = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=0&p=${encodeURIComponent(btfsPassword)}`, {method: 'POST'}).then(text => text.json());
+    if (!Message.startsWith('withdraw')) {
+        log.info('ERROR: BTFS PASSWORD!!!');
+        process.exit(1);
+    }
+    log.info('BTFS PASSWORD: OK!');
 
     scanning();
 };
