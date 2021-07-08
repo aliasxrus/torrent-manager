@@ -37,7 +37,7 @@ module.exports = {
     },
 
     // Останавливает активные загрузки
-    stopActiveDownloads: true,
+    stopActiveDownloads: false,
     /*
     * Автоматически скачивает добавленные торренты и запускает раздачу. stopActiveDownloads должно быть в положении true.
     * ВНИМАНИЕ!!!
