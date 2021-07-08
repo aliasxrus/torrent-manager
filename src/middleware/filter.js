@@ -75,7 +75,9 @@ const checkTorrents = async (torrents) => {
         if (state === 'DOWNLOADING' && !torrents[i].label.startsWith('TM: Downloaded')) {
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
-            await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
+            if (config.autoDownload) {
+                await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
+            }
             continue;
         }
 
