@@ -3,7 +3,6 @@ const apiTorrent = require('./api/torrent');
 const {findIpFilterPath} = require('./child_process');
 const {setIpFilterPath, getIpFilterPath} = require('./fs');
 const {addIpToFilter} = require('./fs');
-const webTorrent = require('../webTorrent');
 const log = require('./log');
 
 const version = (clientName) => {
@@ -56,8 +55,6 @@ const parsePeersArray = async (peersArray) => {
 const checkTorrents = async (torrents) => {
     const seedingTorrents = [];
 
-    await webTorrent.checkTorrentsOnClient(torrents);
-
     for (let i = 0; i < torrents.length; i++) {
         const {status, state, forced} = torrents[i].status;
 
@@ -72,17 +69,10 @@ const checkTorrents = async (torrents) => {
             torrents[i].statusText.startsWith('Connecting to peers')
         ) continue;
 
-        if (state === 'DOWNLOADING' && !torrents[i].label.startsWith('TM: Downloaded')) {
+        if (state === 'DOWNLOADING') {
             await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
             await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
-            if (config.autoDownload) {
-                await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=torrents_start_stopped&v=1`);
-            }
             continue;
-        }
-
-        if (config.autoDownload && state === 'STOPPED') {
-            await webTorrent.addTorrent(torrents[i]);
         }
     }
 
