@@ -84,7 +84,7 @@ const configuration = async () => {
     log.info('qBitTorrent CONFIG: OK!');
 };
 
-const scan = async () => {
+const checkTorrents = async () => {
     const {torrents: qBitTorrents} = JSON.parse(await qBitRequest('/api/v2/sync/maindata'));
 
     for (const key in torrents) {
@@ -109,6 +109,14 @@ const scan = async () => {
             torrents[key].rechecked = true;
         }
     }
+};
+
+const autoDownload = async () => {
+
+}
+
+const scan = async () => {
+    await checkTorrents();
 };
 
 const scanning = async () => {

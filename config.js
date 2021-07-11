@@ -106,7 +106,7 @@ module.exports = {
         port: 8080,
         downloadTimeOut: 120, // Таймаут на закачку, в минутах
         recheckTimeOut: 100, // Таймаут на принудительную проверку, в минутах
-        scanInterval: 1000,
+        scanInterval: 60000,
         qBitTorrentApiUrl: 'http://127.0.0.1',
         autoConfig: false,
         config: {
