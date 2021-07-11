@@ -106,7 +106,7 @@ module.exports = {
         port: 20200,
         downloadTimeOut: 120,
         scanInterval: 1000,
-        qBitTorrentApiUrl: 'http://193.56.8.8',
+        qBitTorrentApiUrl: 'http://127.0.0.1',
         autoConfig: false,
         config: {
             "listen_port": 39346,
