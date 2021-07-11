@@ -100,21 +100,22 @@ module.exports = {
     authToken: '',
 
     qBitTorrent: {
-        qBitTorrent: false,
+        qBitTorrent: false, // Включить управление qBitTorrent
         username: 'admin',
         password: 'admin',
-        port: 20200,
-        downloadTimeOut: 120,
+        port: 8080,
+        downloadTimeOut: 120, // Таймаут на закачку, в минутах
+        recheckTimeOut: 100, // Таймаут на принудительную проверку, в минутах
         scanInterval: 1000,
         qBitTorrentApiUrl: 'http://127.0.0.1',
         autoConfig: false,
         config: {
             "listen_port": 39346,
             "preallocate_all": true, // Резервировать место для всех файлов
-            "save_path": "C:\\downloads",
+            "save_path": "C:\\downloads\\", // В конце необходимо указывать: \\
             "export_dir_fin": "C:\\torrents",
-            "up_limit": 30720,
-            "dl_limit": 0,
+            "up_limit": 30720, // Кратное 1024
+            "dl_limit": 0, // Кратное 1024
             "max_ratio_enabled": true,
             "max_ratio": 0,
             "max_ratio_act": 1, // 1 - удалить торрент из клиента после закачки
@@ -218,7 +219,7 @@ module.exports = {
             // "rss_smart_episode_filters": "s(\\d+)e(\\d+)\n(\\d+)x(\\d+)\n(\\d{4}[.\\-]\\d{1,2}[.\\-]\\d{1,2})\n(\\d{1,2}[.\\-]\\d{1,2}[.\\-]\\d{4})",
             // "save_path_changed_tmm_enabled": false,
             // "save_resume_data_interval": 60,
-            // "scan_dirs": {},
+            // "scan_dirs": {}, // Не будет работать при проверке конфига
             // "schedule_from_hour": 8,
             // "schedule_from_min": 0,
             // "schedule_to_hour": 20,

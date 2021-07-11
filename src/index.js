@@ -12,6 +12,10 @@ if (config.autoBttTransfer.autoTransfer) {
     require('./autoWithdraw');
 }
 
+if (config.qBitTorrent.qBitTorrent) {
+    require('./autoDownload');
+}
+
 const scanning = async () => {
     try {
         await scan();
