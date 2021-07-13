@@ -4,6 +4,7 @@ MVP v. 0.1.1
 
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
++ [Запуск μTorrent в Docker](#docker);
 + [Вывод на Binance](#binance);
 + [Скачивание через qBittorrent](#QBittorrent).
 
@@ -46,6 +47,14 @@ _**Donate:**_
 - _**[Vultr](https://www.vultr.com/?ref=8882663)**_ (почасовая оплата, частые блокировки)
 - ZetaLink (частые блокировки, но деньги возвращают)
 - MaCloud (меняют условия задним числом и загоняют баланс в минус, техподдержка неадекватна)
+
+<a name="money">Запуск μTorrent в Docker</a>
+-------------------------
+(в разработке)
+1. Регистрируемся в _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_
+2. Берем в аренду облачный сервер _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_, для первого раза лучше взять тариф _**Cloud-3b**_, далее достаточно _**Cloud-1**_. ![docker1](./doc/img/docker1.png)
+3. Скачиваем _**[PuTTY](https://www.putty.org/)**_, инструкция по использованию: https://www.youtube.com/watch?v=I1YfpvdHv4k Если возникнут трудности то можно посмотреть [другие инструкции](https://www.youtube.com/results?search_query=windows+putty+ssh+%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%86%D0%B8%D1%8F). Для вставки текста из буфера обмена в PuTTY можно используется правый клик мыши по окну с терминалом.
+4. ...
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
