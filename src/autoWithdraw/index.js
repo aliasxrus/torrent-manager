@@ -42,28 +42,45 @@ const getSmartContractBalances = async () => {
         if (lastData.smartContractBttBalance !== smartContractBttBalance) {
             lastData.smartContractBttBalance = smartContractBttBalance;
             log.balance('SMART CONTRACT BTT:', smartContractBttBalance,
-                '[', Math.floor(smartContractBttBalance / 1000000), '], TRX:',  '[', Math.floor(smartContractTrxBalance / 1000000), ']');
+                '[', Math.floor(smartContractBttBalance / 1000000), '], TRX:', '[', Math.floor(smartContractTrxBalance / 1000000), ']');
         }
 
-        return {smartContractBttBalance, smartContractTrxBalance};
+        return {
+            smartContractBttBalance,
+            smartContractTrxBalance,
+            freeNetRemaining: result.bandwidth.freeNetRemaining || -1,
+        };
     } catch (error) {
         log.info('ERROR: Ошибка получения баланса шлюза');
-        return -1;
+        return {
+            smartContractBttBalance: -1,
+            smartContractTrxBalance: -1,
+            freeNetRemaining: -1,
+        };
     }
 };
 
 const scan = async () => {
     const smartContractBttBalancePrevious = lastData.smartContractBttBalance;
-    const {port, amountLimit, minAmount, minTrxAmount, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
+    const {
+        port,
+        amountLimit,
+        minAmount,
+        minTrxAmount,
+        minFreeNetRemaining,
+        btfsPassword,
+        minDifference,
+        minDifferenceEnabled
+    } = config.autoBttTransfer;
 
     const userBtfsBalance = await getUserBtfsBalance();
-    const {smartContractBttBalance, smartContractTrxBalance} = await getSmartContractBalances();
+    const {smartContractBttBalance, smartContractTrxBalance, freeNetRemaining} = await getSmartContractBalances();
 
     if (
         (minAmount * 1000000) > smartContractBttBalance ||
         1001000000 > smartContractBttBalance ||
         1001000000 > userBtfsBalance ||
-        (minTrxAmount * 1000000) > smartContractTrxBalance
+        ((minTrxAmount * 1000000) > smartContractTrxBalance && freeNetRemaining < minFreeNetRemaining)
     ) return;
 
     if (minDifferenceEnabled && minDifference * 1000000 > smartContractBttBalancePrevious - smartContractBttBalance) return;
