@@ -5,7 +5,7 @@ const log = require('../middleware/log');
 const lastData = {
     userBtfsBalance: 0,
     userBttBalance: 0,
-    smartContractBalance: 0,
+    smartContractBttBalance: 0,
 }
 
 const getUserBtfsBalance = async () => {
@@ -19,27 +19,33 @@ const getUserBtfsBalance = async () => {
     if (lastData.userBtfsBalance !== userBtfsBalance || lastData.userBttBalance !== userBttBalance) {
         lastData.userBtfsBalance = userBtfsBalance;
         lastData.userBttBalance = userBttBalance;
-        log.balance('IN-APP:', userBtfsBalance, `[${Math.floor(userBtfsBalance / 1000000)}]`,
-            'ON-CHAIN:', userBttBalance, `[${Math.floor(userBttBalance / 1000000)}]`);
+        log.balance('IN-APP:', userBtfsBalance, '[', Math.floor(userBtfsBalance / 1000000), ']',
+            'ON-CHAIN:', userBttBalance, '[', Math.floor(userBttBalance / 1000000), ']');
     }
 
     return userBtfsBalance;
 };
 
-const getSmartContractBalance = async () => {
+const getSmartContractBalances = async () => {
     try {
         const result = await fetch(config.autoBttTransfer.url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a')
             .then(text => text.json());
 
-        const {balance: smartContractBalance} = (result.withPriceTokens || result.tokenBalances)
+        let {balance: smartContractBttBalance} = (result.withPriceTokens || result.tokenBalances)
             .find(token => token.tokenId === '1002000');
+        smartContractBttBalance = Number(smartContractBttBalance) || -1
 
-        if (lastData.smartContractBalance !== smartContractBalance) {
-            lastData.smartContractBalance = smartContractBalance;
-            log.balance('SMART CONTRACT BTT:', smartContractBalance, `[${Math.floor(smartContractBalance / 1000000)}]`);
+        let {balance: smartContractTrxBalance} = (result.withPriceTokens || result.tokenBalances)
+            .find(token => token.tokenId === '_');
+        smartContractTrxBalance = Number(smartContractTrxBalance) || -1
+
+        if (lastData.smartContractBttBalance !== smartContractBttBalance) {
+            lastData.smartContractBttBalance = smartContractBttBalance;
+            log.balance('SMART CONTRACT BTT:', smartContractBttBalance,
+                '[', Math.floor(smartContractBttBalance / 1000000), '], TRX:',  '[', Math.floor(smartContractTrxBalance / 1000000), ']');
         }
 
-        return smartContractBalance || -1;
+        return {smartContractBttBalance, smartContractTrxBalance};
     } catch (error) {
         log.info('ERROR: Ошибка получения баланса шлюза');
         return -1;
@@ -47,23 +53,22 @@ const getSmartContractBalance = async () => {
 };
 
 const scan = async () => {
-    const smartContractBalancePrevious = lastData.smartContractBalance;
-    const {port, amountLimit, minAmount, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
+    const smartContractBttBalancePrevious = lastData.smartContractBttBalance;
+    const {port, amountLimit, minAmount, minTrxAmount, btfsPassword, minDifference, minDifferenceEnabled} = config.autoBttTransfer;
 
     const userBtfsBalance = await getUserBtfsBalance();
-    const smartContractBalance = await getSmartContractBalance();
+    const {smartContractBttBalance, smartContractTrxBalance} = await getSmartContractBalances();
 
     if (
-        (minAmount * 1000000) > smartContractBalance ||
-        1001000000 > smartContractBalance ||
-        1001000000 > userBtfsBalance
+        (minAmount * 1000000) > smartContractBttBalance ||
+        1001000000 > smartContractBttBalance ||
+        1001000000 > userBtfsBalance ||
+        (minTrxAmount * 1000000) > smartContractTrxBalance
     ) return;
 
-    if (minDifferenceEnabled && minDifference * 1000000 > smartContractBalancePrevious - smartContractBalance) return;
+    if (minDifferenceEnabled && minDifference * 1000000 > smartContractBttBalancePrevious - smartContractBttBalance) return;
 
-    let withdrawSum = Math.min(amountLimit * 1000000, userBtfsBalance, smartContractBalance);
-    withdrawSum = Math.floor((withdrawSum - 1000) / 1000) * 1000;
-    withdrawSum += 104;
+    let withdrawSum = Math.min(amountLimit * 1000000, userBtfsBalance, smartContractBttBalance);
 
     log.info(`WITHDRAW: ${withdrawSum} [${Math.floor(withdrawSum / 1000000)}]`)
     const result = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=${withdrawSum}&p=${encodeURIComponent(btfsPassword)}`, {method: 'POST'}).then(text => text.text());
