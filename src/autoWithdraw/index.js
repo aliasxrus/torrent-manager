@@ -38,17 +38,19 @@ const getSmartContractBalances = async () => {
         let {balance: smartContractTrxBalance} = (result.withPriceTokens || result.tokenBalances)
             .find(token => token.tokenId === '_');
         smartContractTrxBalance = Number(smartContractTrxBalance) || -1
+        const freeNetRemaining = result.bandwidth.freeNetRemaining || -1;
 
         if (lastData.smartContractBttBalance !== smartContractBttBalance) {
             lastData.smartContractBttBalance = smartContractBttBalance;
             log.balance('SMART CONTRACT BTT:', smartContractBttBalance,
-                '[', Math.floor(smartContractBttBalance / 1000000), '], TRX:', '[', Math.floor(smartContractTrxBalance / 1000000), ']');
+                '[', Math.floor(smartContractBttBalance / 1000000), '], TRX:', '[', Math.floor(smartContractTrxBalance / 1000000),
+                '], FNR:', freeNetRemaining);
         }
 
         return {
             smartContractBttBalance,
             smartContractTrxBalance,
-            freeNetRemaining: result.bandwidth.freeNetRemaining || -1,
+            freeNetRemaining,
         };
     } catch (error) {
         log.info('ERROR: Ошибка получения баланса шлюза');
