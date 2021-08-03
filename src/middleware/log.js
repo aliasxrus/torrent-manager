@@ -1,4 +1,4 @@
-const {debugLog, autoBttTransfer: {logBalance}} = require('../../config');
+const {debugLog, autoBttWithdraw: {logBalance}} = require('../../config');
 
 const info = (...str) => {
     console.log(`${new Date().toLocaleString()}:\t`, ...str);

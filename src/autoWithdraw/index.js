@@ -12,7 +12,7 @@ const getUserBtfsBalance = async () => {
     const {
         BtfsWalletBalance: userBtfsBalance,
         BttWalletBalance: userBttBalance,
-    } = await fetch(`http://127.0.0.1:${config.autoBttTransfer.port}/api/v1/wallet/balance`, {method: 'POST'})
+    } = await fetch(`http://127.0.0.1:${config.autoBttWithdraw.port}/api/v1/wallet/balance`, {method: 'POST'})
         .then(res => res.json());
     if (!userBtfsBalance) return -1;
 
@@ -28,7 +28,7 @@ const getUserBtfsBalance = async () => {
 
 const getSmartContractBalances = async () => {
     try {
-        const result = await fetch(config.autoBttTransfer.url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a')
+        const result = await fetch(config.autoBttWithdraw.url || 'https://apiasia.tronscan.io:5566/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a')
             .then(text => text.json());
 
         let {balance: smartContractBttBalance} = (result.withPriceTokens || result.tokenBalances)
@@ -73,7 +73,7 @@ const scan = async () => {
         btfsPassword,
         minDifference,
         minDifferenceEnabled
-    } = config.autoBttTransfer;
+    } = config.autoBttWithdraw;
 
     const userBtfsBalance = await getUserBtfsBalance();
     const {smartContractBttBalance, smartContractTrxBalance, freeNetRemaining} = await getSmartContractBalances();
@@ -100,13 +100,13 @@ const scanning = async () => {
     } catch (error) {
         log.info(error);
     } finally {
-        setTimeout(scanning, config.autoBttTransfer.interval);
+        setTimeout(scanning, config.autoBttWithdraw.interval);
     }
 };
 
 const run = async () => {
-    const {port, btfsPassword} = config.autoBttTransfer;
-    log.info(`AUTO WITHDRAW: ON\nSCAN INTERVAL: ${config.autoBttTransfer.interval} ms`);
+    const {port, btfsPassword} = config.autoBttWithdraw;
+    log.info(`AUTO WITHDRAW: ON\nSCAN INTERVAL: ${config.autoBttWithdraw.interval} ms`);
 
     const {Message} = await fetch(`http://127.0.0.1:${port}/api/v1/wallet/withdraw?arg=0&p=${encodeURIComponent(btfsPassword)}`, {method: 'POST'}).then(text => text.json());
     if (!Message.startsWith('withdraw')) {

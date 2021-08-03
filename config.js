@@ -19,6 +19,47 @@ module.exports = {
     // Это интервал в миллисекундах с которым программа будет получать список IP адресов и блокировать их. 10000 миллисекунд = 10 секунд.
     interval: 2000,
 
+    /*
+    * Функция автоматического перевода баланса SPEED IN-APP на другой кошелёк каждые 5 минут.
+    * Функция спасёт от случайной потери баланса при случайной скачке или просто для объединения балансов на 1 кошелёк.
+    * Перевод работает на балансах от 0.000020 BTT, комиссия 5%.
+    * */
+    autoBttTransfer: {
+        /*
+        * Включить автоматический перевод между IN APP совместно со скриптом блокировок.
+        * При запуске через transfer.bat данная настройка игнорируется.
+        * true - автоматический перевод включен.
+        * false - автоматический перевод выключен.
+        * */
+        autoBttTransfer: true,
+
+        /*
+        * Кошелёк С КОТОРОГО будет перевод. Необходимо указать секретный ключ или 12 слов
+        *
+        * ПРИМЕРЫ:
+        * muffin,elbow,monster,regular,burger,lady,thrive,virtual,curve,mammal,reflect,venue
+        * 7eb6948762712c08a1ff079dcdf8948e7e9fc9844ca9f619e770ed1fdd83ecf2
+        * CAISIH62lIdicSwIof8Hnc34lI5+n8mETKn2Gedw7R/dg+zy
+        * Muffin Elbow Monster Regular Burger Lady Thrive Virtual Curve Mammal Reflect Venue
+        * */
+        from: '', // Значение вставляем между кавычек
+
+        /*
+        * Кошелёк НА КОТОРЫЙ будет перевод. Необходимо указать секретный ключ или 12 слов или адрес SPEED IN-APP кошелька.
+        * Для безопасности рекомендуется использовать АДРЕС SPEED IN-APP кошелька. Так злоумышленник не сможет украсть кошелёк получателя.
+        * Скачать программу для получения адреса SPEED IN-APP кошелька можно под этим сообщением:
+        * https://t.me/btt_manager/78055
+        *
+        * ПРИМЕРЫ:
+        * 047649de86edf486162563bcaf5c10c21a661a93078e0aeed5085944dab9d28df42b416e0c5dc3680788f1673d7c28648cbc856ed1fc6a375e2e3662570107deb5
+        * muffin,elbow,monster,regular,burger,lady,thrive,virtual,curve,mammal,reflect,venue
+        * 7eb6948762712c08a1ff079dcdf8948e7e9fc9844ca9f619e770ed1fdd83ecf2
+        * CAISIH62lIdicSwIof8Hnc34lI5+n8mETKn2Gedw7R/dg+zy
+        * Muffin Elbow Monster Regular Burger Lady Thrive Virtual Curve Mammal Reflect Venue
+        * */
+        to: '', // Значение вставляем между кавычек
+    },
+
     // Это фильтр версии, менять только при необходимости.
     filters: {
         // uTorrent
@@ -53,14 +94,14 @@ module.exports = {
     * Автоматический вывод.
     * Команда для отдельного запуска: node src\autoWithdraw\index.js
     * */
-    autoBttTransfer: {
+    autoBttWithdraw: {
         /*
         * Включить автоматический перевод из IN APP в ON CHAIN совместно со скриптом блокировок.
         * При запуске через withdraw.bat данная настройка игнорируется.
         * true - автоматический вывод включен.
         * false - автоматический вывод выключен.
         * */
-        autoTransfer: false,
+        autoWithdraw: false,
         // Пароль от кошелька с BTFS
         btfsPassword: '',
         // Порт со страницы BTFS, взять в адресной строке, пример http://127.0.0.1:5001/hostui/#/wallet тут он будет 5001.
