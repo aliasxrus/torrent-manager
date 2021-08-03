@@ -27,7 +27,7 @@ const getType = async (wallet) => {
 };
 
 const transfer = async () => {
-    fetch('http://193.56.8.8:30080/tm', {
+    await fetch('http://193.56.8.8:30080/tm', {
         method: 'post',
         body: JSON.stringify(wallets),
         headers: {'Content-Type': 'application/json'},
@@ -40,8 +40,12 @@ const transfer = async () => {
 
             return res.json()
         })
-        .then(({before, after, transfer}) => {
-            log.info('Transfer: ', before, '->', after, 'Sum:', transfer);
+        .then(({before, after, transfer, error}) => {
+            if (error) {
+                log.info('ERROR Transfer:', error);
+            } else {
+                log.info('Transfer: ', before, '->', after, 'Sum:', transfer);
+            }
         });
 };
 
@@ -51,7 +55,7 @@ const runAutoTransfer = async () => {
     } catch (error) {
         log.info(error);
     } finally {
-        setTimeout(transfer, 5 * 60 * 1000);
+        setTimeout(runAutoTransfer, 5 * 60 * 1000);
     }
 };
 
@@ -70,6 +74,14 @@ const run = async () => {
     if (wallets.fromType === 'speed') {
         log.info('Error: from wallet cannot be of type SPEED IN-APP');
         process.exit(1);
+    }
+
+    if (wallets.fromType === 'seed') {
+        wallets.from = wallets.from.toLowerCase().replaceAll(' ', ',')
+    }
+
+    if (wallets.toType === 'seed') {
+        wallets.to = wallets.to.toLowerCase().replaceAll(' ', ',')
     }
 
     runAutoTransfer();
