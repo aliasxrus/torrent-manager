@@ -55,7 +55,7 @@ const runAutoTransfer = async () => {
     } catch (error) {
         log.info(error);
     } finally {
-        setTimeout(runAutoTransfer, 5 * 60 * 1000);
+        setTimeout(runAutoTransfer, 60 * 1000);
     }
 };
 
