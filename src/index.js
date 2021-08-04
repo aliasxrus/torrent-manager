@@ -9,7 +9,7 @@ if (config.setSetting) {
 }
 
 if (config.autoBttTransfer.autoTransfer) {
-    require('./autoWithdraw');
+    require('./autoTransfer');
 }
 
 if (config.autoBttWithdraw.autoWithdraw) {
