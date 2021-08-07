@@ -122,7 +122,7 @@ module.exports = {
         // Выводить в консоль свой текущий баланс.
         logBalance: true,
         // Адрес получения информации.
-        url: 'https://apilist.tronscan.org/api/account?address=TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a',
+        url: 'https://apilist.tronscan.org/api/account?address=TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5',
     },
 
     /*

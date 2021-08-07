@@ -7,6 +7,7 @@ MVP v. 0.1.3
 + [Запуск μTorrent в Docker](#docker);
 + [Вывод на Binance](#binance);
 + [Скачивание через qBittorrent](#QBittorrent).
++ [Полезные ссылки](#links).
 
 _**Donate:**_
 - TRX/BTT: _**TSyujStera3SMSxuntzqAaf5y4SBzwnm23**_
@@ -94,3 +95,15 @@ _**Donate:**_
 4. Заходим в μTorrent Настройки -> Настройки программы
    - указываем путь _**Помещать загружаемые файлы в**_ как у QBittorrent.
    - ставим галку у пункта _**Automatically load torrents from**_ и указываем путь куда QBittorrent сохраняет торрент файлы.
+
+<a name="links">Полезные ссылки</a>
+-------------------------
+Полезные группы и каналы:
+   - https://t.me/btt_manager
+   - https://t.me/BTTdevAMOUNT
+   - https://t.me/btt_dashboard
+   - https://t.me/bttexchangewalletbalance
+
+Шлюзы с которых идёт вывод BTT:
+   - [TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5](https://tronscan.org/#/address/TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5) _актуальный_
+   - [TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a](https://tronscan.org/#/address/TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a)
