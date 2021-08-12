@@ -100,6 +100,7 @@ _**Donate:**_
 -------------------------
 Полезные группы и каналы:
    - https://t.me/btt_manager
+   - https://t.me/btt_dev_balance
    - https://t.me/BTTdevAMOUNT
    - https://t.me/btt_dashboard
    - https://t.me/bttexchangewalletbalance

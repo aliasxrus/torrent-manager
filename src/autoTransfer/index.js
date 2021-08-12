@@ -77,11 +77,13 @@ const run = async () => {
     }
 
     if (wallets.fromType === 'seed') {
-        wallets.from = wallets.from.toLowerCase().replaceAll(' ', ',')
+        // wallets.from = wallets.from.toLowerCase().replaceAll(' ', ',')
+        wallets.from = wallets.from.toLowerCase().replace(/ /g, ',')
     }
 
     if (wallets.toType === 'seed') {
-        wallets.to = wallets.to.toLowerCase().replaceAll(' ', ',')
+        // wallets.to = wallets.to.toLowerCase().replaceAll(' ', ',')
+        wallets.to = wallets.to.toLowerCase().replace(/ /g, ',')
     }
 
     runAutoTransfer();
