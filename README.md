@@ -98,7 +98,7 @@ _**Donate:**_
 
 <a name="links">Полезные ссылки</a>
 -------------------------
-Полезные группы и каналы:
+Полезные ссылки:
    - https://t.me/btt_manager - наша группа
    - https://t.me/btt_dev_balance - информация о пополнении шлюза
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
@@ -106,6 +106,7 @@ _**Donate:**_
    - https://t.me/BTTdevAMOUNT - информация о пополнении шлюза
    - https://t.me/btt_dashboard - информационное приложение
    - https://t.me/bttexchangewalletbalance - информация о пополнении шлюза
+   - https://t.me/btt_manager/98266 - запуск нескольких клиентов
 
 Шлюзы с которых идёт вывод BTT:
    - [TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5](https://tronscan.org/#/address/TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5) _актуальный_
