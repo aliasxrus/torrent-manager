@@ -47,11 +47,11 @@ module.exports = {
         /*
         * Кошелёк НА КОТОРЫЙ будет перевод. Необходимо указать секретный ключ или 12 слов или адрес SPEED IN-APP кошелька.
         * Для безопасности рекомендуется использовать АДРЕС SPEED IN-APP кошелька. Так злоумышленник не сможет украсть кошелёк получателя.
-        * Скачать программу для получения адреса SPEED IN-APP кошелька можно под этим сообщением:
-        * https://t.me/btt_manager/78055
+        * Скачать программу для получения адреса SPEED IN-APP кошелька можно здесь:
+        * https://t.me/btt_manager/105802
         *
         * ПРИМЕРЫ:
-        * 047649de86edf486162563bcaf5c10c21a661a93078e0aeed5085944dab9d28df42b416e0c5dc3680788f1673d7c28648cbc856ed1fc6a375e2e3662570107deb5
+        * BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=
         * muffin,elbow,monster,regular,burger,lady,thrive,virtual,curve,mammal,reflect,venue
         * 7eb6948762712c08a1ff079dcdf8948e7e9fc9844ca9f619e770ed1fdd83ecf2
         * CAISIH62lIdicSwIof8Hnc34lI5+n8mETKn2Gedw7R/dg+zy
