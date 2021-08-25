@@ -12,6 +12,7 @@ MVP v. 0.1.5
 _**Donate:**_
 - TRX/BTT: _**TSyujStera3SMSxuntzqAaf5y4SBzwnm23**_
 - VISA SBERBANK: _**4274 3200 4502 9926**_
+- Speed/BTFS IN APP: _**BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=**_
 
 <a name="info">Как использовать скрипт</a>
 -------------------------
@@ -40,6 +41,8 @@ _**Donate:**_
 - _**[FirstByte](https://firstbyte.ru/?from=80394)**_
 - _**[ZOMRO](https://zomro.com/vds.html?from=294244)**_
 - _**[Planetahost](https://planetahost.ru/)**_
+- _**[MaCloud](https://macloud.ru/?partner=qby7f922cx)**_
+- _**[VdsSh](http://vds.sh/?u=38277)**_
 
 Лучшие Linux сервера у _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_
 
@@ -99,6 +102,7 @@ _**Donate:**_
 <a name="links">Полезные ссылки</a>
 -------------------------
 Полезные ссылки:
+   - https://inapp.fun - сервис для работы с IN APP
    - https://t.me/btt_manager - наша группа
    - https://t.me/btt_dev_balance - информация о пополнении шлюза
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
@@ -107,6 +111,9 @@ _**Donate:**_
    - https://t.me/btt_dashboard - информационное приложение
    - https://t.me/bttexchangewalletbalance - информация о пополнении шлюза
    - https://t.me/btt_manager/98266 - запуск нескольких клиентов
+   - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
+   - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
+   - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
 
 Шлюзы с которых идёт вывод BTT:
    - [TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5](https://tronscan.org/#/address/TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5) _актуальный_
