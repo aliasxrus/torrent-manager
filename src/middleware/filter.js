@@ -28,10 +28,16 @@ const blockPeers = async (peers) => {
 
     for (let i = 0; i < peers.length; i++) {
         const peer = peers[i];
+        const isUtVersion = peer.client.includes('3.5.5');
+        const isBtVersion = peer.client.includes('7.10.5');
+        const isLtVersion = peer.client.includes('1.2.');
+        const withBttVersion = isUtVersion || isBtVersion || isLtVersion;
+
         if (!filterMu(peer) &&
             !filterBit(peer) &&
             !filterLibtorrent(peer) &&
             !filterUnknown(peer) &&
+            !withBttVersion &&
             !blockedIp.includes(peer.ip)
         ) {
             log.info('Block', peer.ip, peer.client);
