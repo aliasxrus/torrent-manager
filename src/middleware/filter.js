@@ -29,8 +29,10 @@ const blockPeers = async (peers) => {
             continue;
         }
 
-        const clientWhiteList = peer.client.startsWith('μTorrent') ||
-            peer.client.startsWith('BitTorrent') ||
+        const clientWhiteList =
+            // peer.client.startsWith('μTorrent') ||
+            // peer.client.startsWith('BitTorrent') ||
+            peer.client.includes('Torrent') ||
             peer.client.startsWith('libtorrent') ||
             peer.client.startsWith('Unknown');
 

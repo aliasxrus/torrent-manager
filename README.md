@@ -1,5 +1,5 @@
 # Torrent Manager
-MVP v. 0.1.7
+MVP v. 0.1.8
 #### Наша группа в Telegram: https://t.me/btt_manager
 
 + [Как использовать скрипт](#info);
