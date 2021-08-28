@@ -5,44 +5,33 @@ const {setIpFilterPath, getIpFilterPath} = require('./fs');
 const {addIpToFilter} = require('./fs');
 const log = require('./log');
 
-const version = (clientName) => {
-    const reg = clientName.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/g);
-    if (!reg) return [0, 0, 0];
-    const mm = Array.from(reg)[0].split('.').map(e => parseInt(e));
-    return [mm[0], mm[1], mm[2]];
-}
-
 let blockedIp = [];
 
-const mu = config.filters.mu;
-const bit = config.filters.bit;
-const libtorrent = config.filters.libtorrent;
-const unknown = config.filters.unknown;
-const filterMu = peer => (peer.client.startsWith('μTorrent') || peer.client.startsWith('µTorrent')) && peer.version[0] >= mu.major && peer.version[1] >= mu.minor;
-const filterBit = peer => peer.client.startsWith('BitTorrent') && peer.version[0] >= bit.major && peer.version[1] >= bit.minor;
-const filterLibtorrent = peer => peer.client.startsWith('libtorrent') && peer.version[0] >= libtorrent.major && peer.version[1] >= libtorrent.minor && peer.version[2] >= libtorrent.micro;
-const filterUnknown = peer => peer.client.startsWith('Unknown') && peer.version[0] >= unknown.major && peer.version[1] >= unknown.minor;
+const block = async (peer) =>{
+    log.info('Block', peer.ip, peer.client);
+    await addIpToFilter(peer.ip);
+    blockedIp.push(peer.ip);
+};
 
 const blockPeers = async (peers) => {
     if (blockedIp.length > 100000) blockedIp = [];
 
     for (let i = 0; i < peers.length; i++) {
         const peer = peers[i];
-        const isUtVersion = peer.client.includes('3.5.5');
-        const isBtVersion = peer.client.includes('7.10.5');
-        const isLtVersion = peer.client.includes('1.2.');
+        if (blockedIp.includes(peer.ip)) continue;
+
+        const isUtVersion = peer.client.includes('3.5.5') && config.filters.uTorrent;
+        const isBtVersion = peer.client.includes('7.10.5') && config.filters.BitTorrent;
+        const isLtVersion = peer.client.includes('1.2.2') && config.filters.LibTorrent;
         const withBttVersion = isUtVersion || isBtVersion || isLtVersion;
 
-        if (!filterMu(peer) &&
-            !filterBit(peer) &&
-            !filterLibtorrent(peer) &&
-            !filterUnknown(peer) &&
-            !withBttVersion &&
-            !blockedIp.includes(peer.ip)
-        ) {
-            log.info('Block', peer.ip, peer.client);
-            await addIpToFilter(peer.ip);
-            blockedIp.push(peer.ip);
+        const clientWhiteList = peer.client.startsWith('μTorrent') ||
+            peer.client.startsWith('BitTorrent') ||
+            peer.client.startsWith('libtorrent') ||
+            peer.client.startsWith('Unknown');
+
+        if (!clientWhiteList) {
+            await block(peer);
         }
     }
 
@@ -52,7 +41,7 @@ const blockPeers = async (peers) => {
 const parsePeersArray = async (peersArray) => {
     const peers = peersArray.filter(Array.isArray).flat().map(peer => {
         const client = peer[5].trim();
-        return {ip: peer[1], utp: peer[3], client, version: version(client)}
+        return {ip: peer[1], utp: peer[3], client}
     });
 
     return peers;
@@ -97,6 +86,10 @@ const scan = async () => {
     if (config.stopActiveDownloads) {
         torrents = await checkTorrents(torrents);
     }
+
+    // Не блокировать/блокировать если 100%, условие в конфиг
+    // Блокировать uTorrent если там 100%
+    // Не блокируем если скорость отдачи меньше ххх, в конфиг
 
     const peersArray = await apiTorrent.getPeers(torrents);
     const peers = await parsePeersArray(peersArray);
