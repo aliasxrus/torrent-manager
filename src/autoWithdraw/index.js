@@ -53,7 +53,7 @@ const getSmartContractBalances = async () => {
             freeNetRemaining,
         };
     } catch (error) {
-        log.info('ERROR: Ошибка получения баланса шлюза');
+        log.info('ERROR: Ошибка получения баланса шлюза или на балансе 0 btt');
         return {
             smartContractBttBalance: -1,
             smartContractTrxBalance: -1,
