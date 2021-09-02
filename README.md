@@ -111,6 +111,7 @@ _**Donate:**_
    - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
    - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
+   - https://tronscan.org/#/exchange/trc20?token=BitTorrent/TRX&id=39 - TRON биржа, можно прикупить TRX за BTT
 
 Шлюзы с которых идёт вывод BTT:
    - [TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5](https://tronscan.org/#/address/TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5) _актуальный_
