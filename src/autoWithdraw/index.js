@@ -53,7 +53,7 @@ const getSmartContractBalances = async () => {
             freeNetRemaining,
         };
     } catch (error) {
-        log.info('ERROR: Ошибка получения баланса шлюза');
+        log.info('ERROR: Ошибка получения баланса шлюза или на балансе 0 btt');
         return {
             smartContractBttBalance: -1,
             smartContractTrxBalance: -1,
@@ -72,7 +72,6 @@ const scan = async () => {
         minFreeNetRemaining,
         btfsPassword,
         minDifference,
-        minDifferenceEnabled
     } = config.autoBttWithdraw;
 
     const userBtfsBalance = await getUserBtfsBalance();
@@ -85,7 +84,7 @@ const scan = async () => {
         ((minTrxAmount * 1000000) > smartContractTrxBalance && freeNetRemaining < minFreeNetRemaining)
     ) return;
 
-    if (minDifferenceEnabled && minDifference * 1000000 > smartContractBttBalancePrevious - smartContractBttBalance) return;
+    if (minDifference * 1000000 > smartContractBttBalancePrevious - smartContractBttBalance) return;
 
     let withdrawSum = Math.min(amountLimit * 1000000, userBtfsBalance, smartContractBttBalance);
 
