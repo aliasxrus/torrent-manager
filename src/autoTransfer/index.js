@@ -26,6 +26,7 @@ const getType = async (wallet) => {
     return 'key';
 };
 
+let sum = 0;
 const transfer = async () => {
     await fetch('https://tm1.in-app.fun/tm', {
         method: 'post',
@@ -44,9 +45,13 @@ const transfer = async () => {
             if (error) {
                 log.info('ERROR Transfer:', error);
             } else {
-                log.info('Transfer: ', (before / 1000000).toFixed(6),
+                sum += transfer;
+                log.info(
+                    'Transfer: ', (before / 1000000).toFixed(6),
                     '->', (after / 1000000).toFixed(6),
-                    'Sum:', (transfer / 1000000).toFixed(6));
+                    'Pay:', (transfer / 1000000).toFixed(6),
+                    'Sum:', (sum / 1000000).toFixed(6)
+                );
             }
         });
 };
