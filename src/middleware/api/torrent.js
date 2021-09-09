@@ -120,8 +120,8 @@ const getTorrents = async () => {
             u20: el[20], // string
             statusText: el[21], // string (Downloading 8.6 %)
             u22: el[22], // string - порядковый номер?
-            u23: el[23], // integer - время?
-            u24: el[24], // integer - время?
+            added: el[23], // integer (unix time UTC) - добавлен
+            begin: el[24], // integer (unix time UTC) - поставлен в раздачу
             u25: el[25], // integer
             downloadDir: el[26], // string
             u27: el[27], // integer

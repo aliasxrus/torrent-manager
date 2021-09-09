@@ -21,6 +21,7 @@
   "dependencies": {
     "html-escaper": "^3.0.3",
     "jsdom": "^16.5.3",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "systeminformation": "^5.8.7"
   }
 }
