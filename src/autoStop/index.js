@@ -96,8 +96,10 @@ const stop = async (torrents) => {
 	log.info ("Found",selectedTorrents.length,"torrents matching the configured parameters. Stop|remove", waste, "torrents");
 	var action = 'stop';
 	if ( stopMethod == 2 ) { action = 'removetorrent'; }
-	else if ( stopMethod == 3 ) { action = 'removedatatorrent'; }
-	
+	else if ( stopMethod == 3 ) {
+		action = 'removedatatorrent';
+		await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=gui.delete_to_trash&v=0`);
+		}
 	for (let i = 0; i < waste; i++) {
 		await apiTorrent.controlTorrent(selectedTorrents[i].hash, action);
 		log.info(`Torrent "${selectedTorrents[i].name.substr(0,35)}" is stopped/removed.`);
