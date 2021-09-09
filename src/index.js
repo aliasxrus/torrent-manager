@@ -20,6 +20,10 @@ if (config.qBitTorrent.qBitTorrent) {
     require('./autoDownload');
 }
 
+if (config.autostop.autoStop) {
+    require('./autoStop');
+}
+
 const scanning = async () => {
     try {
         await scan();
