@@ -19,8 +19,13 @@ const blockPeers = async (peers) => {
     for (let i = 0; i < peers.length; i++) {
         const peer = peers[i];
         if (blockedIp.includes(peer.ip)) continue;
-
-        const isUtVersion = peer.client.includes('3.5.5') && config.filters.uTorrent;
+		
+		if (peer.client.includes('FAKE')) {
+			await block(peer);
+			continue;
+		}
+        
+		const isUtVersion = peer.client.includes('3.5.5') && config.filters.uTorrent;
         const isBtVersion = peer.client.includes('7.10.5') && config.filters.BitTorrent;
         const isLtVersion = peer.client.includes('1.2.2') && config.filters.LibTorrent;
         const withBttVersion = isUtVersion || isBtVersion || isLtVersion;
@@ -39,8 +44,9 @@ const blockPeers = async (peers) => {
         if (!clientWhiteList) {
             await block(peer);
         }
+		
     }
-
+	await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=ipfilter.enable&v=0`);
     await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };
 
