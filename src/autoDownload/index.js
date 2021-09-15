@@ -9,6 +9,7 @@ const {
         scanInterval,
         downloadTimeOut,
         recheckTimeOut,
+		maxSize,
         autoConfig,
         config,
     }
@@ -16,6 +17,7 @@ const {
 
 let sid;
 let torrents = {};
+let sizeMb;
 
 const isAuth = () => {
     return fetch(`${qBitTorrentApiUrl}:${port}/api/v2/app/version`, {
@@ -96,14 +98,22 @@ const checkTorrents = async () => {
             torrents[key] = qBitTorrents[key];
             continue;
         }
-
-        if (new Date().getTime() - qBitTorrents[key].added_on * 1000 > downloadTimeOut * 60 * 1000) {
+		
+        sizeMb = Math.floor (qBitTorrents[key].size / 1024 / 1024);
+		
+        if (maxSize > 0 && sizeMb > maxSize) {
             await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
-            log.info('qBitTorrent delete:', key, qBitTorrents[key].name);
+            log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Size: ${sizeMb} Mb > ${maxSize} Mb`);
             continue;
         }
 
-        if (!torrents[key].rechecked && new Date().getTime() - qBitTorrents[key].added_on * 1000 > recheckTimeOut * 60 * 1000) {
+        if (downloadTimeOut > 0 && new Date().getTime() - qBitTorrents[key].added_on * 1000 > downloadTimeOut * 60 * 1000) {
+            await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
+            log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Download TimeOut > ${downloadTimeOut} min`);
+            continue;
+        }
+
+        if (recheckTimeOut > 0 && !torrents[key].rechecked && new Date().getTime() - qBitTorrents[key].added_on * 1000 > recheckTimeOut * 60 * 1000) {
             await qBitRequest('/api/v2/torrents/recheck', `hashes=${key}`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
             log.info('qBitTorrent recheck:', key, qBitTorrents[key].name);
             torrents[key].rechecked = true;
@@ -134,7 +144,7 @@ const run = async () => {
 
     scanning();
 };
-
+log.info("QBittorrent manager started.");
 run();
 
 // let oldConf;
