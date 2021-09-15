@@ -204,16 +204,20 @@ module.exports = {
     apiBttUrl: 'http://127.0.0.1',
     authToken: '',
 
+	/*
+	* Управление qBitTorrent
+	*/
     qBitTorrent: {
-        qBitTorrent: false, // Включить управление qBitTorrent
-        username: 'admin',
-        password: 'admin',
-        port: 8080,
-        downloadTimeOut: 120, // Таймаут на закачку, в минутах
-        recheckTimeOut: 100, // Таймаут на принудительную проверку, в минутах
-        scanInterval: 60000,
+        qBitTorrent: false, // Вкл/выкл управление qBitTorrent. При запуске через qbit.bat - эта опция игнорируется
+        username: 'admin', //логин для веб-интерфейса. Задается в настройках qBitTorrent
+        password: 'admin', //пароль для веб-интерфейса. Задается в настройках qBitTorrent
+        port: 8080, //порт для веб-интерфейса. Задается в настройках qBitTorrent (желательно ставить в диапазоне  49152—65535).
+        downloadTimeOut: 120, // Таймаут на закачку, в минутах (0 для отключения). При превышении времени неактивности торрент будет удален вместе с данными.
+        recheckTimeOut: 100, // Таймаут на принудительную проверку, в минутах (0 для отключения)
+        maxSize: 50000, // Максимальный размер торрента (Mb). Торренты больше этого размера будут удаляться, (0 для отключения).
+        scanInterval: 5000,
         qBitTorrentApiUrl: 'http://127.0.0.1',
-        autoConfig: false,
+        autoConfig: false,  //Вкл|выкл автоматическую настройку qBittorrent (включайте и меняйте опции только если понимаете, что делаете).
         config: {
             "listen_port": 39346,
             "preallocate_all": true, // Резервировать место для всех файлов
