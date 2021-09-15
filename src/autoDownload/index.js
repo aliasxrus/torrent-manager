@@ -10,6 +10,7 @@ const {
         downloadTimeOut,
         recheckTimeOut,
 		maxSize,
+		minSize,
         autoConfig,
         config,
     }
@@ -99,12 +100,16 @@ const checkTorrents = async () => {
             continue;
         }
 		
-        sizeMb = Math.floor (qBitTorrents[key].size / 1024 / 1024);
+        sizeMb = 0;
+        if (maxSize == 0) maxSize=10000000;
+        if (qBitTorrents[key].size > 0) sizeMb = Math.floor (qBitTorrents[key].size / 1024 / 1024);
 		
-        if (maxSize > 0 && sizeMb > maxSize) {
-            await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
-            log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Size: ${sizeMb} Mb > ${maxSize} Mb`);
-            continue;
+        if (sizeMb > 0) {
+            if (sizeMb > maxSize || sizeMb < minSize) {
+               await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
+               log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Size: ${sizeMb} Mb is out of range ${minSize} - ${maxSize} Mb`);
+               continue;
+            }
         }
 
         if (downloadTimeOut > 0 && new Date().getTime() - qBitTorrents[key].added_on * 1000 > downloadTimeOut * 60 * 1000) {
