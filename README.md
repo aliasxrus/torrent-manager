@@ -14,6 +14,10 @@ _**Donate:**_
 - VISA SBERBANK: _**4274 3200 4502 9926**_
 - Speed/BTFS IN APP: _**BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=**_
 
+_**Donate за автоматическое удаление файлов:**_
+- TRX/BTT: _**TNZjNWimuExCSxggqk7Z2QvpaCw1GifM74**_
+- Speed/BTFS IN APP: _**BKEroKV+R46PbDhvDIrcYcmbtkkdscMdWF/Y8nKLEkMu63JA4ZyINiECykGUe43OtHrg8Z2XLbnbiGDRKk7ZQxI=**_
+
 <a name="info">Как использовать скрипт</a>
 -------------------------
 На сегодняшний день поддержка BTT есть только у клиентов μTorrent/BitTorrent/Web(LibTorrent) последних версий.
