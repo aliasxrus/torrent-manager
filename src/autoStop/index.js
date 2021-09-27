@@ -9,12 +9,34 @@ const minAvail = config.autostop.minAvail;
 const minRatio = config.autostop.minRatio;
 const stopMethod = config.autostop.stopMethod;
 const selectMethod = config.autostop.selectMethod;
+const maxSize = config.autostop.maxSize;
+const minSize = config.autostop.minSize;
+const seedPeer = config.autostop.seedPeer;
 var pause = config.autostop.timeout;
 if (pause < 120000) ( pause = 120000 );
 const disks = config.autostop.disks.map(function(x){ return x.toUpperCase(); });
 
-const selectTorrents = async (torrents,updown,time=0,ratio=0) => {
-    const selectedTorrents = [];
+const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=0) => {
+    let selectedTorrents = [];
+	let sizeMb;
+	let peers;
+	if (maxSz > 0 || minSz > 0 || sp > 0 ) {
+		if (maxSz == 0) maxSz = 100000;
+		if (sp == 0) sp = 100000;
+		for (let i = 0; i < torrents.length; i++) {
+            const {status, state, forced} = torrents[i].status;
+			sizeMb = torrents[i].size / 1024 / 1024;
+			peers = torrents[i].peersInSwarm;
+			if ( peers == 0 ) peers=1;
+		    if (state == updown) {
+				if  ( sizeMb < minSz || sizeMb > maxSz || torrents[i].seedsInSwarm / peers > sp) {
+					selectedTorrents.push(torrents[i]);
+				}
+			}
+		}
+		return selectedTorrents;
+	}
+		
 	let now = new Date();
 	let ts = Math.floor(now.getTime() / 1000);
 	for (let i = 0; i < torrents.length; i++) {
@@ -80,6 +102,20 @@ const checkDisk = async () => {
 	}
 }
 
+const checkSizeSp = async (maxSz=0,minSz=0,sp=0) => {
+	let selectedTorrents = [];
+	await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=gui.delete_to_trash&v=0`);
+	let torrents = await apiTorrent.getTorrents();
+	selectedTorrents = await selectTorrents(torrents,'SEEDING',0,0,maxSz,minSz,sp);
+	if ( selectedTorrents.length > 0) {
+		for (let i = 0; i < selectedTorrents.length; i++) {
+			await apiTorrent.controlTorrent(selectedTorrents[i].hash, 'removedatatorrent');
+			log.info(`Torrent "${selectedTorrents[i].name.substr(0,35)}" is stopped/removed.`);
+		}
+		return;
+    }
+}
+
 const stop = async (torrents) => {
 	let selectedTorrents = [];
     selectedTorrents = await selectTorrents(torrents,'SEEDING');
@@ -108,6 +144,7 @@ const stop = async (torrents) => {
 
 const autostop = async () => {
 	if (minAvail > 0) ( await checkDisk () );
+	if (maxSize > 0 || minSize > 0 || seedPeer > 0) ( await checkSizeSp (maxSize,minSize,seedPeer) );
     let torrents = await apiTorrent.getTorrents();
     stop (torrents);
 };

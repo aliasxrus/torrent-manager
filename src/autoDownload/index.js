@@ -9,16 +9,18 @@ const {
         scanInterval,
         downloadTimeOut,
         recheckTimeOut,
-		maxSize,
-		minSize,
+        maxSize,
+        minSize,
         autoConfig,
         config,
+        seedPeer,
     }
 } = require('../../config');
 
 let sid;
 let torrents = {};
 let sizeMb;
+let sp;
 
 const isAuth = () => {
     return fetch(`${qBitTorrentApiUrl}:${port}/api/v2/app/version`, {
@@ -109,6 +111,18 @@ const checkTorrents = async () => {
                await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
                log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Size: ${sizeMb} Mb is out of range ${minSize} - ${maxSize} Mb`);
                continue;
+            }
+        }
+		
+        if (seedPeer > 0) {
+            seed = qBitTorrents[key].num_complete;
+            peer = qBitTorrents[key].num_incomplete;
+            if ( peer == 0 ) peer = 1;
+            sp = seed / peer;
+            sp = parseFloat(sp.toFixed(2));
+            if ( sp > seedPeer ) {
+                await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
+                log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Seed/Peer: ${sp}`);
             }
         }
 
