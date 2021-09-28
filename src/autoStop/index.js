@@ -24,14 +24,11 @@ const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=
 		if (maxSz == 0) maxSz = 100000;
 		if (sp == 0) sp = 100000;
 		for (let i = 0; i < torrents.length; i++) {
-            const {status, state, forced} = torrents[i].status;
 			sizeMb = torrents[i].size / 1024 / 1024;
 			peers = torrents[i].peersInSwarm;
 			if ( peers == 0 ) peers=1;
-		    if (state == updown) {
-				if  ( sizeMb < minSz || sizeMb > maxSz || torrents[i].seedsInSwarm / peers > sp) {
-					selectedTorrents.push(torrents[i]);
-				}
+		    if  ( sizeMb < minSz || sizeMb > maxSz || torrents[i].seedsInSwarm / peers > sp) {
+				selectedTorrents.push(torrents[i]);
 			}
 		}
 		return selectedTorrents;
