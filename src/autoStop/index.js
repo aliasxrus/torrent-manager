@@ -37,7 +37,8 @@ const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=
 	let now = new Date();
 	let ts = Math.floor(now.getTime() / 1000);
 	for (let i = 0; i < torrents.length; i++) {
-        const {status, state, forced} = torrents[i].status;
+        let {status, state, forced} = torrents[i].status;
+		if (updown == 'any') state=updown;
 	    if (state == updown && torrents[i].ratio / 10 >=  ratio && (ts - torrents[i].begin) / 60 > time ) {
 			selectedTorrents.push(torrents[i]);
         }
@@ -91,10 +92,13 @@ const checkDisk = async () => {
 				return;
 			}
 			
-			selectedTorrents = await selectTorrents(selectedTorrents,'SEEDING');
-			selectedTorrents = await sortTorrent (selectedTorrents,selectMethod);
-			await apiTorrent.controlTorrent(selectedTorrents[0].hash, 'removedatatorrent');
-			log.info(`Torrent "${selectedTorrents[0].name.substr(0,35)}" is removed.`);
+			selectedTorrents = await selectTorrents(selectedTorrents,'any');
+			if ( selectedTorrents.length > 0 ) {
+				selectedTorrents = await sortTorrent (selectedTorrents,selectMethod);
+				await apiTorrent.controlTorrent(selectedTorrents[0].hash, 'removedatatorrent');
+				log.info(`Torrent "${selectedTorrents[0].name.substr(0,35)}" is removed.`);
+			}
+			else log.info(`No torrents found to delete`);
 		}
 	}
 }
