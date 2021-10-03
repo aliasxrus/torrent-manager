@@ -200,7 +200,7 @@ module.exports = {
 
 
 /*
-Country         string
+  Country         string
   IP              string
   Hostname        string
   UTP             int
