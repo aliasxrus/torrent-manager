@@ -20,6 +20,14 @@ const blockPeers = async (peers) => {
         const peer = peers[i];
         if (blockedIp.includes(peer.ip)) continue;
 
+        if (config.inactiveLimit > 0 && peer.inactive > config.inactiveLimit) {
+            continue;
+        }
+
+        if (config.strategy === 1 && peer.downloaded > peer.uploaded) {
+            continue;
+        }
+
         if (peer.client.includes('FAKE')) {
           await block(peer);
           continue;
@@ -45,14 +53,13 @@ const blockPeers = async (peers) => {
             await block(peer);
         }
     }
-	await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=ipfilter.enable&v=0`);
     await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=ipfilter.enable&v=1`);
 };
 
 const parsePeersArray = async (peersArray) => {
     const peers = peersArray.filter(Array.isArray).flat().map(peer => {
         const client = peer[5].trim();
-        return {ip: peer[1], utp: peer[3], client}
+        return {ip: peer[1], utp: peer[3], client, uploaded: peer[13], downloaded: peer[14], inactive: peer[20]}
     });
 
     return peers;
