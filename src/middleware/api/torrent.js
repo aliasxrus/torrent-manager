@@ -47,7 +47,7 @@ const requestWithToken = async (path) => {
     }
 
     try {
-        return fetch(`${config.apiTorrentUrl}:${config.port}`+ path + `&token=${token}`,
+        return await fetch(`${config.apiTorrentUrl}:${config.port}`+ path + `&token=${token}`,
             {
                 headers: {
                     Cookie: config.guid,
