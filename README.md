@@ -99,7 +99,7 @@ CONFIG_PATH=/home/wineuser/tm/ut/config.yaml /home/wineuser/tm/torrent-manager-l
 ```shell
 notepad /home/wineuser/tm/ut/config.yaml
 ```
-11. Обязательно меняем пароль пользователя https://losst.ru/kak-smenit-parol-v-linux
+11. Обязательно меняем пароль пользователя для _**RDP**_, в _**RDP**_ открываем ещё один терминал (как в пункте 6) и вводим команду. https://losst.ru/kak-smenit-parol-v-linux
 ```shell
 passwd
 ```
