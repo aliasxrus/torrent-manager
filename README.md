@@ -88,7 +88,7 @@ docker run -it \
 git clone https://github.com/aliasxrus/go-torrent-manager.git /home/wineuser/tm &&
 chmod +x /home/wineuser/tm/torrent-manager-linux
 ```
-8. Запускаем μTorrent, окно сворачиваем:
+8. Запускаем μTorrent, окно терминала сворачиваем:
 ```shell
 LANG=C.UTF-8 wine /home/wineuser/tm/ut/uTorrent.exe
 ```
@@ -104,6 +104,7 @@ notepad /home/wineuser/tm/ut/config.yaml
 ```shell
 passwd
 ```
+12. Ссылка для доступа к веб интерфейсу http://IP_СЕРВЕРА:ПОРТ_ВЕБ_ИНТЕРФЕЙСА/gui/ пример: http://111.111.111.111:45380/gui/
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
