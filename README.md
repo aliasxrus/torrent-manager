@@ -72,6 +72,7 @@ docker run -it \
   --hostname="$(hostname)" \
   --env="RDP_SERVER=yes" \
   -d \
+  --restart=always \
   scottyhardy/docker-wine /bin/bash
 ```
 Где:
