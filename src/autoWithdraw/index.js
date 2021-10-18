@@ -26,6 +26,7 @@ const getUserBtfsBalance = async () => {
     return userBtfsBalance;
 };
 
+let isGetSmartContractBalancesError = false;
 const getSmartContractBalances = async () => {
     try {
         const result = await fetch(config.autoBttWithdraw.url || 'https://apiasia.tronscan.io:5566/api/account?address=TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5')
@@ -47,13 +48,17 @@ const getSmartContractBalances = async () => {
                 '], FNR:', freeNetRemaining);
         }
 
+        isGetSmartContractBalancesError = false;
         return {
             smartContractBttBalance,
             smartContractTrxBalance,
             freeNetRemaining,
         };
     } catch (error) {
-        log.info('ERROR: Ошибка получения баланса шлюза или на балансе 0 btt');
+        if (!isGetSmartContractBalancesError) {
+            log.info('ERROR: Ошибка получения баланса шлюза или на балансе 0 btt');
+        }
+        isGetSmartContractBalancesError = true;
         return {
             smartContractBttBalance: -1,
             smartContractTrxBalance: -1,
