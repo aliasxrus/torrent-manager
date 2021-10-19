@@ -145,7 +145,7 @@ const checkTorrents = async () => {
             continue;
         }
 
-        if (recheckTimeOut > 0 && !torrents[key].rechecked && now - qBitTorrents[key].added_on * 1000 > recheckTimeOut * 60 * 1000) {
+        if (recheckTimeOut > 0 && !torrents[key].rechecked && new Date().getTime() - qBitTorrents[key].added_on * 1000 > recheckTimeOut * 60 * 1000) {
             await qBitRequest('/api/v2/torrents/recheck', `hashes=${key}`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
             log.info('qBitTorrent recheck:', key, qBitTorrents[key].name);
             torrents[key].rechecked = true;
