@@ -14,6 +14,8 @@ const {
         autoConfig,
         config,
         seedPeer,
+        sort,
+        sortInterval,
     }
 } = require('../../config');
 
@@ -21,6 +23,7 @@ let sid;
 let torrents = {};
 let sizeMb;
 let sp;
+
 
 const isAuth = () => {
     return fetch(`${qBitTorrentApiUrl}:${port}/api/v2/app/version`, {
@@ -89,25 +92,35 @@ const configuration = async () => {
     log.info('qBitTorrent CONFIG: OK!');
 };
 
-const checkTorrents = async () => {
-    const {torrents: qBitTorrents} = JSON.parse(await qBitRequest('/api/v2/sync/maindata'));
+const sortTorrents = async () => {
+	let torrents=JSON.parse(await qBitRequest('/api/v2/torrents/info?filter=downloading,queuedDL&sort=size&reverse=true'));
+	if ( torrents.length > 0) {
+		for (let i = 0; i < torrents.length; i++) {
+			await qBitRequest('/api/v2/torrents/topPrio', `hashes=${torrents[i].hash}`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
+		}
+    }
+};
 
+
+const checkTorrents = async () => {
+	const {torrents: qBitTorrents} = JSON.parse(await qBitRequest('/api/v2/sync/maindata'));
+	
     for (const key in torrents) {
         if (!qBitTorrents[key]) delete torrents[key];
     }
 
     for (const key in qBitTorrents) {
+
         if (!torrents[key]) {
             torrents[key] = qBitTorrents[key];
             continue;
         }
 		
         sizeMb = 0;
-        if (maxSize == 0) maxSize=10000000;
         if (qBitTorrents[key].size > 0) sizeMb = Math.floor (qBitTorrents[key].size / 1024 / 1024);
 		
         if (sizeMb > 0) {
-            if (sizeMb > maxSize || sizeMb < minSize) {
+            if ((maxSize > 0 && sizeMb > maxSize) || sizeMb < minSize) {
                await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
                log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Size: ${sizeMb} Mb is out of range ${minSize} - ${maxSize} Mb`);
                continue;
@@ -158,9 +171,23 @@ const scanning = async () => {
     }
 };
 
+const sortTor = async () => {
+    await sortTorrents();
+};
+
+const sorting = async () => {
+    try {
+        await sortTor();
+    } catch (error) {
+        log.info(error);
+    } finally {
+        setTimeout(sorting, sortInterval);
+    }
+};
+
 const run = async () => {
     if (autoConfig) await configuration();
-
+	if (sort) sorting ();
     scanning();
 };
 log.info("QBittorrent manager started.");
