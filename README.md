@@ -62,7 +62,7 @@ _**Donate за автоматическое удаление файлов:**_
 3. Скачиваем и подключаемся к серверу _**[PuTTY](https://www.putty.org/)**_, инструкция по использованию: https://www.youtube.com/watch?v=I1YfpvdHv4k Если возникнут трудности то можно посмотреть [другие инструкции](https://www.youtube.com/results?search_query=windows+putty+ssh+%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%86%D0%B8%D1%8F). Для вставки текста из буфера обмена в PuTTY можно используется правый клик мыши по окну с терминалом.
 4. Выполняем команду:
 ```shell
-git clone https://github.com/aliasxrus/go-torrent-manager.git ~/tm -b linux &&
+git clone https://github.com/aliasxrus/go-torrent-manager.git ~/tm &&
 chmod +x ~/tm/torrent-manager-linux &&
 chmod 777 ~/tm/ut
 ```
@@ -89,12 +89,11 @@ AutoTransferWallets:
     keyType: speed
     recipient: BNEY1vf9iFaf4se7m0tIZxYBvDEluTS+u8yLvGFMAyzT9UIDrk+Yi8pdw5ydGtoOt/M/lF1nlcVKwbYvvQie3Xo=
     interval: 3
-    portFile: /home/wineuser/.wine/dosdevices/c:/users/wineuser/Local Settings/Application Data/BitTorrentHelper/port
+    portFile: /root/.wine/drive_c/users/root/Local Settings/Application Data/BitTorrentHelper/port
     speedPassword: BHZJ3obt9IYWJWO8r1wQ
-
 eof
 ```
-Обязательно смените логин, пароль и адрес начисления.
+Обязательно смените логин, пароль и адрес начисления. Менять порт не нужно! Логин и пароль менять в торрент клиенте: _**настройки -> дополнительно -> веб интерфейс**_.
 
 6. После подключения копируем и вставляем команду:
 ```shell
@@ -106,6 +105,8 @@ docker run -it \
   -e LC_ALL=C.UTF-8 \
   -e LC_ALL=C.UTF-8 \
   -v ~/tm:/tm \
+  -v ~/tm/ut/BitTorrentHelper:"/root/.wine/drive_c/users/root/Local Settings/Application Data/BitTorrentHelper" \
+  -v ~/downloads:/root/.wine/drive_c/users/root/Downloads \
   -e CONFIG_PATH=/tm/ut/config.yaml \
   -d \
   --restart=always \
@@ -114,7 +115,7 @@ docker run -it \
 Где:
  - _**--name ut**_ - название контейнера
  - _**-p 30000:30000**_ - порт для входящий соединений торрент клиента, можно сменить при условии смены в торрент клиенте во вкладке _**Соединение**_. Все значения должны совпадать.
- - _**-p 45380:45380**_ - порт для доступа к веб интерфейсу, для открытия страницы в браузере. Если он вам не нужен, желательно удалить эту строчку. При открытии доступа в сеть необходимо сменить порт, логин, пароль в торрент клиенте: _**настройки -> дополнительно -> веб интерфейс**_. Не забудьте сменить эти данные в _**config.yaml**_ блокировщика.
+ - _**-p 45380:45380**_ - порт для доступа к веб интерфейсу, для открытия страницы в браузере. Меняем только первое значение, пример: _**-p 33333:45380**_
 7. Ссылка для доступа к веб интерфейсу:
  ```shell
 http://IP_СЕРВЕРА:ПОРТ_ВЕБ_ИНТЕРФЕЙСА/gui/
@@ -133,6 +134,10 @@ docker logs -f --tail 100 tm
 9. Для перезапуска блокировщика и клиента выполните команду:
 ```shell
 docker restart tm
+```
+10. В случае сбоя контейнер можно удалить и создать по новой (пункт 6), торрент клиент и закачки . Команда для удаления
+```shell
+docker rm -f tm
 ```
 
 <a name="binance">Вывод на Binance</a>
