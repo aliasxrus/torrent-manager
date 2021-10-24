@@ -109,7 +109,7 @@ docker run -it \
   -e CONFIG_PATH=/tm/ut/config.yaml \
   -d \
   --restart=always \
-  scottyhardy/docker-wine /tm/torrent-manager-linux
+  aliasxrus/docker-wine /tm/torrent-manager-linux
 ```
 Где:
  - _**--name ut**_ - название контейнера
