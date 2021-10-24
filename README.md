@@ -60,51 +60,80 @@ _**Donate за автоматическое удаление файлов:**_
 1. Регистрируемся в _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_
 2. Берем в аренду облачный сервер _**[REG.RU](https://www.reg.ru/vps/cloud/?rlink=reflink-6666127)**_ промокод на скидку _**9737-44AE-4C48-1361**_, для первого раза лучше взять тариф _**Cloud-3b**_, далее достаточно _**Cloud-1**_. Нам необходим VPS с предустановленным Docker, выбираем как указано как на картинке: ![docker1](./doc/img/docker1.png)
 3. Скачиваем и подключаемся к серверу _**[PuTTY](https://www.putty.org/)**_, инструкция по использованию: https://www.youtube.com/watch?v=I1YfpvdHv4k Если возникнут трудности то можно посмотреть [другие инструкции](https://www.youtube.com/results?search_query=windows+putty+ssh+%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%86%D0%B8%D1%8F). Для вставки текста из буфера обмена в PuTTY можно используется правый клик мыши по окну с терминалом.
-4. После подключения копируем и вставляем команду:
+4. Выполняем команду:
+```shell
+git clone https://github.com/aliasxrus/go-torrent-manager.git ~/tm -b linux &&
+chmod +x ~/tm/torrent-manager-linux &&
+chmod 777 ~/tm/ut
+```
+5. Задаём конфигурацию блокировщика, более подробно можно узнать _**[тут](https://github.com/aliasxrus/go-torrent-manager/blob/main/config.yaml)**_:
+```shell
+cat > ~/tm/ut/config.yaml <<\eof
+IpFilterConfig:
+  interval: 3
+  length: 5000
+  path: /tm/ut/ipfilter.dat
+  username: GOMAXPROCS
+  password: 4tc2lNElWO4m
+  port: 45380
+  url: http://127.0.0.1
+  errorLimit: 100
+  inactiveLimit: 0
+  strategy: 1
+  clearUTorrent: false
+  clearBitTorrent: false
+  clearLibTorrent: true
+  startClient: /tm/ut/uTorrent.exe
+AutoTransferWallets:
+  - name: Speed
+    keyType: speed
+    recipient: BNEY1vf9iFaf4se7m0tIZxYBvDEluTS+u8yLvGFMAyzT9UIDrk+Yi8pdw5ydGtoOt/M/lF1nlcVKwbYvvQie3Xo=
+    interval: 3
+    portFile: /home/wineuser/.wine/dosdevices/c:/users/wineuser/Local Settings/Application Data/BitTorrentHelper/port
+    speedPassword: BHZJ3obt9IYWJWO8r1wQ
+
+eof
+```
+Обязательно смените логин, пароль и адрес начисления.
+
+6. После подключения копируем и вставляем команду:
 ```shell
 docker run -it \
-  --name ut \
+  --name tm \
   -p 30000:30000 \
   -p 45380:45380 \
-  -p 45381:3389/tcp \
   -e LANG=C.UTF-8 \
   -e LC_ALL=C.UTF-8 \
-  --hostname="$(hostname)" \
-  --env="RDP_SERVER=yes" \
+  -e LC_ALL=C.UTF-8 \
+  -v ~/tm:/tm \
+  -e CONFIG_PATH=/tm/ut/config.yaml \
   -d \
   --restart=always \
-  scottyhardy/docker-wine /bin/bash
+  aliasxrus/docker-wine /tm/torrent-manager-linux
 ```
 Где:
  - _**--name ut**_ - название контейнера
- - _**-p 30000:30000**_ - порт для входящий соединений торрент клиента, можно сменить при условии смены в торент клиенте во вкладке _**Соединение**_. Все значения должны совпадать.
+ - _**-p 30000:30000**_ - порт для входящий соединений торрент клиента, можно сменить при условии смены в торрент клиенте во вкладке _**Соединение**_. Все значения должны совпадать.
  - _**-p 45380:45380**_ - порт для доступа к веб интерфейсу, для открытия страницы в браузере. Если он вам не нужен, желательно удалить эту строчку. При открытии доступа в сеть необходимо сменить порт, логин, пароль в торрент клиенте: _**настройки -> дополнительно -> веб интерфейс**_. Не забудьте сменить эти данные в _**config.yaml**_ блокировщика.
- - _**-p 45381:3389/tcp**_ - порт для подключения через _**RDP**_. Меняем только первое число.
+7. Ссылка для доступа к веб интерфейсу:
+ ```shell
+http://IP_СЕРВЕРА:ПОРТ_ВЕБ_ИНТЕРФЕЙСА/gui/
+# пример, вам надо указать IP сервера:
+http://111.111.111.111:45380/gui/
+```
+Первым делом необходимо изменить логин и пароль от веб интерфейса который указывали в конфигурации выше!
 
-5. Подключаемся по _**RDP**_ указывая _**IP_СЕРВЕРА:ПОРТ_RDP**_ пример: 111.111.111.111:45381. Логин и пароль: _**wineuser**_
-6. Открываем терминал: ![docker2](./doc/img/docker2.png)
-7. Выполняем команду:
+8. Для просмотра логов блокировщика введите команду:
 ```shell
-git clone https://github.com/aliasxrus/go-torrent-manager.git /home/wineuser/tm &&
-chmod +x /home/wineuser/tm/torrent-manager-linux
+docker logs -f --tail 100 tm
 ```
-8. Запускаем μTorrent, окно терминала сворачиваем:
+Где:
+- _**-f**_ - следить за выводом лога, для выхода из данного режима нажмите Control+C
+- _**--tail 100**_ - количество строк, отображаемых с конца
+9. Для перезапуска блокировщика и клиента выполните команду:
 ```shell
-LANG=C.UTF-8 wine /home/wineuser/tm/ut/uTorrent.exe
+docker restart tm
 ```
-9. После запуска μTorrent, запускаем блокировщик в новом окне терминала:
-```shell
-CONFIG_PATH=/home/wineuser/tm/ut/config.yaml /home/wineuser/tm/torrent-manager-linux
-```
-10. Команда для редактирования _**config.yaml**_ блокировщика, после внесения изменений необходимо сохранить и перезапустить блокировщик:
-```shell
-notepad /home/wineuser/tm/ut/config.yaml
-```
-11. Обязательно меняем пароль пользователя для _**RDP**_, в _**RDP**_ открываем ещё один терминал (как в пункте 6) и вводим команду. https://losst.ru/kak-smenit-parol-v-linux
-```shell
-passwd
-```
-12. Ссылка для доступа к веб интерфейсу http://IP_СЕРВЕРА:ПОРТ_ВЕБ_ИНТЕРФЕЙСА/gui/ пример: http://111.111.111.111:45380/gui/
 
 <a name="binance">Вывод на Binance</a>
 -------------------------
