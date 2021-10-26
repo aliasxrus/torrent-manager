@@ -2,6 +2,8 @@ const apiTorrent = require('../middleware/api/torrent');
 const config = require('../../config');
 const log = require('../middleware/log')
 const si = require('systeminformation');
+const rp = require('fs.realpath');
+const execSync = require('child_process').execSync;
 
 const maxTorrent = config.autostop.maxTorrent;
 const minTime = config.autostop.minTime;
@@ -14,7 +16,9 @@ const minSize = config.autostop.minSize;
 const seedPeer = config.autostop.seedPeer;
 var pause = config.autostop.timeout;
 if (pause < 120000) ( pause = 120000 );
-const disks = config.autostop.disks.map(function(x){ return x.toUpperCase(); });
+const OS = process.platform;
+var disks = config.autostop.disks.map(function(x){ return x.toUpperCase(); });
+if ( !OS.includes ('win') ) disks = config.autostop.disks.map(function(x){ return x.toLowerCase(); });
 
 const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=0) => {
     let selectedTorrents = [];
@@ -51,7 +55,12 @@ const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=
 const selectForDiskTorrent = async (torrents,disk) => {
     const selectedDiskTorrents = [];
 	for (let i = 0; i < torrents.length; i++) {
-		const downDisk = torrents[i].downloadDir.slice(0, torrents[i].downloadDir.indexOf (':') + 1);
+		var downDisk = torrents[i].downloadDir.slice(0, torrents[i].downloadDir.indexOf (':') + 1);
+
+		if ( !OS.includes ('win') ) {
+			var realPath = rp.realpathSync(process.env.HOME+'/.wine/dosdevices/'+downDisk.toLowerCase());
+			downDisk = execSync('df '+ realPath + ' | tail -n +2 | cut -d " " -f1 | tr -d \'\r\n\'' , { encoding: 'utf-8' });
+			}
 		if ( downDisk == disk ) {
 			selectedDiskTorrents.push(torrents[i]);
 		}
@@ -71,17 +80,18 @@ const sortTorrent = async (torrents, selectMethod) => {
 const checkDisk = async () => {
 	const disksData = await si.fsSize(function(data) {return data;})
 	for (let i = 0; i < disksData.length; i++) {
-		if (  disks.includes(disksData[i].mount ) ){
+		if (  disks.includes(disksData[i].fs ) ){
 			var avail = Math.floor(disksData[i].available / 1024 / 1024/1024);
 			if ( avail >= minAvail ) { continue; }
 			await apiTorrent.requestWithToken(`/gui/?action=setsetting&s=gui.delete_to_trash&v=0`);
 			let torrents = await apiTorrent.getTorrents();
 			let selectedTorrents = [];
 			let downTorrents =[];
-			log.info("On disk", disksData[i].mount, avail,"GB free. This is less than the", minAvail,"GB limit.");
-			selectedTorrents = await selectForDiskTorrent (torrents,disksData[i].mount);
+			log.info("On disk", disksData[i].fs, avail,"GB free. This is less than the", minAvail,"GB limit.");
+			selectedTorrents = await selectForDiskTorrent (torrents,disksData[i].fs);
+
 			if ( selectedTorrents.length == 0) {
-				log.info ("No torrents on disk", disksData[i].mount,". There is nothing to delete.");
+				log.info ("No torrents on disk", disksData[i].fs,". There is nothing to delete.");
 				return;
 			}
 			downTorrents = await selectTorrents(selectedTorrents,'FINISHED');
@@ -91,7 +101,7 @@ const checkDisk = async () => {
 				log.info(`Torrent "${downTorrents[0].name.substr(0,35)}" is removed.`);
 				return;
 			}
-			
+
 			selectedTorrents = await selectTorrents(selectedTorrents,'any');
 			if ( selectedTorrents.length > 0 ) {
 				selectedTorrents = await sortTorrent (selectedTorrents,selectMethod);

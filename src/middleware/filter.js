@@ -91,8 +91,13 @@ const checkTorrents = async (torrents) => {
         ) continue;
 
         if (state === 'DOWNLOADING') {
-            await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
-            await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
+            if (config.removeActiveDownloads) {
+                await apiTorrent.controlTorrent(torrents[i].hash, 'removedatatorrent');
+            }
+            else {
+                await apiTorrent.controlTorrent(torrents[i].hash, 'stop');
+                await apiTorrent.setTorrentLabel(torrents[i].hash, `TM: Остановлен! [${new Date().toLocaleTimeString()}]`);
+            }
             continue;
         }
     }
@@ -109,7 +114,7 @@ const scan = async () => {
     let torrents = await apiTorrent.getTorrents();
 
     // Останавливаем загружающиеся и начинаем закачку сами
-    if (config.stopActiveDownloads) {
+    if (config.stopActiveDownloads || config.removeActiveDownloads) {
         torrents = await checkTorrents(torrents);
     }
 
