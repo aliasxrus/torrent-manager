@@ -2,7 +2,7 @@ const apiTorrent = require('../middleware/api/torrent');
 const config = require('../../config');
 const log = require('../middleware/log')
 const si = require('systeminformation');
-const rp = require('fs.realpath');
+const rp = require('fs').realpath;
 const execSync = require('child_process').execSync;
 
 const maxTorrent = config.autostop.maxTorrent;
