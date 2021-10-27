@@ -5,6 +5,7 @@ MVP v. 0.1.10
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
 + [Запуск μTorrent в Docker](#docker);
++ [Запуск μTorrent в Docker с VNC](https://github.com/lexandr0s/wine-vnc);
 + [Вывод на Binance](#binance);
 + [Скачивание через qBittorrent](#QBittorrent);
 + [Полезные ссылки](#links).
