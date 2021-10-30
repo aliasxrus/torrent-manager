@@ -139,7 +139,7 @@ const checkTorrents = async () => {
             }
         }
 
-        if (downloadTimeOut > 0 && qBitTorrents[key].state == "stalledDL" && new Date().getTime() - qBitTorrents[key].last_activity * 1000 > downloadTimeOut * 60 * 1000) {
+        if (downloadTimeOut > 0 && (qBitTorrents[key].state == "stalledDL" || qBitTorrents[key].state == "metaDL") && new Date().getTime() - qBitTorrents[key].last_activity * 1000 > downloadTimeOut * 60 * 1000) {
             await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
             log.info('qBitTorrent delete:', qBitTorrents[key].name, `; Download TimeOut > ${downloadTimeOut} min`);
             continue;
