@@ -2,7 +2,7 @@ const apiTorrent = require('../middleware/api/torrent');
 const config = require('../../config');
 const log = require('../middleware/log')
 const si = require('systeminformation');
-const rp = require('fs').realpath;
+const rp = require('fs').realpathSync;
 const execSync = require('child_process').execSync;
 
 const maxTorrent = config.autostop.maxTorrent;
@@ -57,11 +57,11 @@ const selectForDiskTorrent = async (torrents,disk) => {
 	for (let i = 0; i < torrents.length; i++) {
 		var downDisk = torrents[i].downloadDir.slice(0, torrents[i].downloadDir.indexOf (':') + 1);
 
-		if ( !OS.includes ('win') ) {
-			var realPath = rp.realpathSync(process.env.HOME+'/.wine/dosdevices/'+downDisk.toLowerCase());
+        if ( !OS.includes ('win') ) {
+            var realPath = rp(process.env.HOME+'/.wine/dosdevices/'+downDisk.toLowerCase());
 			downDisk = execSync('df '+ realPath + ' | tail -n +2 | cut -d " " -f1 | tr -d \'\r\n\'' , { encoding: 'utf-8' });
 			}
-		if ( downDisk == disk ) {
+		if ( downDisk == disk || downDisk == 'overlay' ) {
 			selectedDiskTorrents.push(torrents[i]);
 		}
     }
