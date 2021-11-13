@@ -105,7 +105,6 @@ docker run -it \
   -p 45380:45380 \
   -e LANG=C.UTF-8 \
   -e LC_ALL=C.UTF-8 \
-  -e LC_ALL=C.UTF-8 \
   -v ~/tm:/tm \
   -v ~/tm/ut/BitTorrentHelper:"/root/.wine/drive_c/users/root/Local Settings/Application Data/BitTorrentHelper" \
   -v ~/downloads:/root/.wine/drive_c/users/root/Downloads \
