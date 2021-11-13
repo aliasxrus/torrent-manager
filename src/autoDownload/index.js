@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const log = require('../middleware/log');
+const path = require('path');
 const {
     qBitTorrent: {
         qBitTorrentApiUrl,
@@ -204,12 +205,14 @@ const checkTorrents = async () => {
         }
 		
         if (rename) {
-            var new_name=transliterate(qBitTorrents[key].name);
-            if (new_name != qBitTorrents[key].name) {
-                var add_torrent=`urls=${encodeURIComponent(qBitTorrents[key].magnet_uri)}&rename=${encodeURIComponent(new_name)}&category=${encodeURIComponent(qBitTorrents[key].category)}&savepath=${encodeURIComponent(qBitTorrents[key].save_path)}`;
+            var contentPath = qBitTorrents[key].content_path.replace(qBitTorrents[key].save_path, '');
+            if ( path.parse(contentPath).dir !='') contentPath=path.parse(contentPath).dir;
+            contentPath = contentPath.replace('.!qB', '');
+            if ( contentPath != '' && contentPath != qBitTorrents[key].name) {
+                var add_torrent=`urls=${encodeURIComponent(qBitTorrents[key].magnet_uri)}&rename=${encodeURIComponent(contentPath)}&category=${encodeURIComponent(qBitTorrents[key].category)}&savepath=${encodeURIComponent(qBitTorrents[key].save_path)}`;
                 await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
                 await qBitRequest('/api/v2/torrents/add', add_torrent, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
-                log.info("Rename", qBitTorrents[key].name,"to", new_name);
+                log.info(`Rename "${qBitTorrents[key].name}" to "${contentPath}`);
             }
         }
 
