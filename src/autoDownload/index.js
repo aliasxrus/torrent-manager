@@ -208,7 +208,7 @@ const checkTorrents = async () => {
             var contentPath = qBitTorrents[key].content_path.replace(qBitTorrents[key].save_path, '');
             if ( path.parse(contentPath).dir !='') contentPath=path.parse(contentPath).dir;
             contentPath = contentPath.replace('.!qB', '');
-            if ( contentPath != '' && contentPath != qBitTorrents[key].name) {
+            if ( contentPath != '' && contentPath.trim() != qBitTorrents[key].name.trim()) {
                 var add_torrent=`urls=${encodeURIComponent(qBitTorrents[key].magnet_uri)}&rename=${encodeURIComponent(contentPath)}&category=${encodeURIComponent(qBitTorrents[key].category)}&savepath=${encodeURIComponent(qBitTorrents[key].save_path)}`;
                 await qBitRequest('/api/v2/torrents/delete', `hashes=${key}&deleteFiles=true`, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
                 await qBitRequest('/api/v2/torrents/add', add_torrent, 'POST', 'application/x-www-form-urlencoded; charset=UTF-8');
