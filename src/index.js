@@ -8,10 +8,6 @@ if (config.setSetting) {
     require('./autoConfig');
 }
 
-if (config.autoBttTransfer.autoTransfer) {
-    require('./autoTransfer');
-}
-
 if (config.autoBttWithdraw.autoWithdraw) {
     require('./autoWithdraw');
 }

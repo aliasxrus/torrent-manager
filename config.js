@@ -23,47 +23,6 @@ module.exports = {
     // Блокировка неактивных пиров, в секундах
     inactiveLimit: 600,
 
-    /*
-    * Функция автоматического перевода баланса SPEED IN-APP на другой кошелёк каждую минуту.
-    * Функция спасёт от случайной потери баланса при случайной скачке или просто для объединения балансов на 1 кошелёк.
-    * Перевод работает на балансах от 0.000020 BTT, комиссия 5%.
-    * */
-    autoBttTransfer: {
-        /*
-        * Включить автоматический перевод между IN APP совместно со скриптом блокировок.
-        * При запуске через transfer.bat данная настройка игнорируется.
-        * true - автоматический перевод включен.
-        * false - автоматический перевод выключен.
-        * */
-        autoTransfer: false,
-
-        /*
-        * Кошелёк С КОТОРОГО будет перевод. Необходимо указать секретный ключ или 12 слов
-        *
-        * ПРИМЕРЫ:
-        * muffin,elbow,monster,regular,burger,lady,thrive,virtual,curve,mammal,reflect,venue
-        * 7eb6948762712c08a1ff079dcdf8948e7e9fc9844ca9f619e770ed1fdd83ecf2
-        * CAISIH62lIdicSwIof8Hnc34lI5+n8mETKn2Gedw7R/dg+zy
-        * Muffin Elbow Monster Regular Burger Lady Thrive Virtual Curve Mammal Reflect Venue
-        * */
-        from: '', // Значение вставляем между кавычек
-
-        /*
-        * Кошелёк НА КОТОРЫЙ будет перевод. Необходимо указать секретный ключ или 12 слов или адрес SPEED IN-APP кошелька.
-        * Для безопасности рекомендуется использовать АДРЕС SPEED IN-APP кошелька. Так злоумышленник не сможет украсть кошелёк получателя.
-        * Скачать программу для получения адреса SPEED IN-APP кошелька можно здесь:
-        * https://t.me/btt_manager/105802
-        *
-        * ПРИМЕРЫ:
-        * BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=
-        * muffin,elbow,monster,regular,burger,lady,thrive,virtual,curve,mammal,reflect,venue
-        * 7eb6948762712c08a1ff079dcdf8948e7e9fc9844ca9f619e770ed1fdd83ecf2
-        * CAISIH62lIdicSwIof8Hnc34lI5+n8mETKn2Gedw7R/dg+zy
-        * Muffin Elbow Monster Regular Burger Lady Thrive Virtual Curve Mammal Reflect Venue
-        * */
-        to: '', // Значение вставляем между кавычек
-    },
-
     filters: {
         /*
         * Правила фильтрования
