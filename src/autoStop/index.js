@@ -43,7 +43,7 @@ const selectTorrents = async (torrents,updown,time=0,ratio=0,maxSz=0,minSz=0,sp=
 	for (let i = 0; i < torrents.length; i++) {
         let {status, state, forced} = torrents[i].status;
 		if (updown == 'any') state=updown;
-	    if (state == updown && torrents[i].ratio / 10 >=  ratio && (ts - torrents[i].begin) / 60 > time ) {
+	    if (state == updown && torrents[i].ratio / 10 >=  ratio && (ts - torrents[i].added) / 60 > time ) {
 			selectedTorrents.push(torrents[i]);
         }
     }
@@ -69,7 +69,7 @@ const selectForDiskTorrent = async (torrents,disk) => {
 };
 
 const sortTorrent = async (torrents, selectMethod) => {
-	torrents.sort(function(a, b){return a.begin - b.begin});
+	torrents.sort(function(a, b){return a.added - b.added});
 	if (selectMethod == 2 ) {torrents.sort(function(a, b){return a.peersConnected - b.peersConnected});}
 	if (selectMethod == 3 ) {torrents.sort(function(a, b){return a.peersInSwarm - b.peersInSwarm});}
 	if (selectMethod == 4 ) {torrents.sort(function(a, b){return b.seedsInSwarm / b.peersInSwarm - a.seedsInSwarm / a.peersInSwarm});}
@@ -94,6 +94,8 @@ const checkDisk = async () => {
 				log.info ("No torrents on disk", disksData[i].fs,". There is nothing to delete.");
 				return;
 			}
+			
+			/*
 			downTorrents = await selectTorrents(selectedTorrents,'FINISHED');
 			if ( downTorrents.length > 0) {
 				downTorrents = await sortTorrent (downTorrents,1);
@@ -101,7 +103,8 @@ const checkDisk = async () => {
 				log.info(`Torrent "${downTorrents[0].name.substr(0,35)}" is removed.`);
 				return;
 			}
-
+			*/
+			
 			selectedTorrents = await selectTorrents(selectedTorrents,'any');
 			if ( selectedTorrents.length > 0 ) {
 				selectedTorrents = await sortTorrent (selectedTorrents,selectMethod);
