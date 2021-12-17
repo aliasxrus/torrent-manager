@@ -29,7 +29,7 @@ const getUserBtfsBalance = async () => {
 let isGetSmartContractBalancesError = false;
 const getSmartContractBalances = async () => {
     try {
-        const result = await fetch(config.autoBttWithdraw.url || 'https://apiasia.tronscan.io:5566/api/account?address=TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5')
+        const result = await fetch(config.autoBttWithdraw.url || 'https://apiasia.tronscan.io:5566/api/account?address=TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA')
             .then(text => text.json());
 
         let {balance: smartContractBttBalance} = (result.withPriceTokens || result.tokenBalances)
