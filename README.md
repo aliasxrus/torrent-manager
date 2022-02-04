@@ -4,6 +4,7 @@ MVP v. 0.1.10
 
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
++ [Продажа и покупка IN APP](#/doc/WavesTMM.md);
 + [Запуск μTorrent в Docker](#docker);
 + [Запуск μTorrent в Docker с VNC](https://github.com/lexandr0s/wine-vnc);
 + [Вывод на Binance](#binance);
@@ -12,6 +13,7 @@ MVP v. 0.1.10
 
 _**Donate:**_
 - TRX/BTT: _**TSyujStera3SMSxuntzqAaf5y4SBzwnm23**_
+- Waves: _**3PQ5YevZhNaGP7D89YGG64yMPUkg7xSDoEs**_
 - VISA SBERBANK: _**4274 3200 4502 9926**_
 - Speed/BTFS IN APP: _**BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=**_
 
