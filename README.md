@@ -196,7 +196,7 @@ docker rm -f tm
    - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
    - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
-   - https://tronscan.org/#/exchange/trc20?token=BitTorrent/TRX&id=39 - TRON биржа, можно прикупить TRX за BTT
+   - https://sunswap.com - обменник в сети TRON
    - https://tronstation.io/calculator - калькулятор энергии и пропускной способности
 
 Шлюзы с которых идёт вывод BTT:
