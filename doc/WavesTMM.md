@@ -14,9 +14,9 @@
 Для работы с биржей надо только зарегистрироваться, без прохождения дополнительных проверок.
 
 Способы входа на биржу [Waves Exchange](https://waves.exchange):
-- Регистрация с использованием [Email](https://waves.exchange/sign-up/email);
-- Использовать расширение для браузера [Waves Keeper](https://docs.waves.tech/ru/ecosystem/waves-keeper);
+- Использовать расширение для браузера [Waves Keeper](https://docs.waves.tech/ru/ecosystem/waves-keeper) (наиболее надежный способ);
 - Использовать [программный доступ](https://waves.exchange/sign-up/software), будут сгенерированы приватные фразы и ключ от кошелька которые необходимо сохранить в надежном месте.
+- Регистрация с использованием [Email](https://waves.exchange/sign-up/email);
 
 <a name="wavesAddress">Узнать адрес Waves кошелька</a>
 -------------------------
