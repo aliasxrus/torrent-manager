@@ -4,10 +4,14 @@
 + [Вход на DEX биржу Waves](#waves);
 + [Узнать адрес Waves кошелька](#wavesAddress);
 + [Обмен IN APP на TakeMyMoney Waves](#buyTmm);
++ [Обмен BTTOLD на WebTorrentToken Waves](#buyWtt);
 + [Узнать секретный / приватный ключ BitTorrent Speed](#speedKey);
 + [Продажа TakeMyMoney на бирже Waves](#sellTmmUsdt);
 + [Вывод USDT с биржи Waves](#withdrawUsdt);
 + [Обмен и вывод средств в банк / qiwi и др.](#bestchange);
++ [TakeMyMoney / USDT](https://waves.exchange/trading/spot/CESxeaxm1urc8GgFHF93U6GSF7BU3GuECDPQY75WMdQc_USDT);
++ [TakeMyMoney / WAVES](https://waves.exchange/trading/spot/CESxeaxm1urc8GgFHF93U6GSF7BU3GuECDPQY75WMdQc_WAVES);
++ [TakeMyMoney / WebTorrentToken](https://waves.exchange/trading/spot/CESxeaxm1urc8GgFHF93U6GSF7BU3GuECDPQY75WMdQc_A4nJPPXipvDw7MDRLq5fbj61PwiXkvjcXYGasDLNFvzg);
 
 <a name="waves">Вход на DEX биржу Waves</a>
 -------------------------
@@ -15,8 +19,8 @@
 
 Способы входа на биржу [Waves Exchange](https://waves.exchange):
 - Использовать расширение для браузера [Waves Keeper](https://docs.waves.tech/ru/ecosystem/waves-keeper) (наиболее надежный способ);
-- Использовать [программный доступ](https://waves.exchange/sign-up/software), будут сгенерированы приватные фразы и ключ от кошелька которые необходимо сохранить в надежном месте.
-- Регистрация с использованием [Email](https://waves.exchange/sign-up/email);
+- Использовать [программный доступ](https://waves.exchange/sign-up/software), будут сгенерированы приватные фразы и ключ от кошелька которые необходимо сохранить в надежном месте;
+- Регистрация с использованием [Email](https://waves.exchange/sign-up/email).
 
 <a name="wavesAddress">Узнать адрес Waves кошелька</a>
 -------------------------
@@ -32,6 +36,16 @@
 Для этого необходимо ввести приватный ключ от кошелька TRON с IN APP и указать адрес Waves кошелька куда будут перечислены TakeMyMoney. 
 
 Сервис не хранит данные кошельков, но в целях безопасности пользоваться TRON кошельком с которого были осуществлены переводы IN APP нежелательно.
+
+<a name="buyWtt">Обмен BTTOLD на WebTorrentToken Waves</a>
+-------------------------
+Для удобства торговли был создан WebTorrentToken, это обертка над BTTOLD для биржи Waves с курсом 1 к 1.
+
+Обменять BTTOLD на WebTorrentToken и обратно можно в любое время на сайте [InApp.Fun](https://inapp.fun)
+
+Все обернутые BTTOLD хранятся на кошельке [TZ9J8b5cFvLBmyqZeRTZZZurxuPtmGfWhs](https://tronscan.io/#/address/TZ9J8b5cFvLBmyqZeRTZZZurxuPtmGfWhs)
+
+Торговая пара [TakeMyMoney / WebTorrentToken](https://waves.exchange/trading/spot/CESxeaxm1urc8GgFHF93U6GSF7BU3GuECDPQY75WMdQc_A4nJPPXipvDw7MDRLq5fbj61PwiXkvjcXYGasDLNFvzg)
 
 <a name="speedKey">Узнать секретный / приватный ключ BitTorrent Speed</a>
 -------------------------
