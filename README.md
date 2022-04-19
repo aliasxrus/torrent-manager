@@ -187,14 +187,14 @@ docker rm -f tm
    - https://t.me/btt_manager - наша группа
    - https://t.me/btt_dev_balance - информация о пополнении шлюза
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
-   - https://t.me/BTTdevAMOUNT - информация о пополнении шлюза
    - https://t.me/bttexchangewalletbalance - информация о пополнении шлюза
-   - https://t.me/btt_manager/98266 - запуск нескольких клиентов
    - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
    - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
+   - https://kyberswap.com - обменник в сети BTTC
    - https://sunswap.com - обменник в сети TRON
    - https://tronstation.io/calculator - калькулятор энергии и пропускной способности
+   
 
 Шлюзы с которых идёт вывод BTT:
    - [TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA](https://tronscan.org/#/address/TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA) _актуальный_
