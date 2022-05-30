@@ -191,7 +191,7 @@ docker rm -f tm
    - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
    - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
-   - https://kyberswap.com - обменник в сети BTTC
+   - [Kyberswap](https://kyberswap.com/#/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=100&networkId=199) - обменник в сети BTTC
    - https://sunswap.com - обменник в сети TRON
    - https://tronstation.io/calculator - калькулятор энергии и пропускной способности
    
