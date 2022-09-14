@@ -2,6 +2,7 @@
 MVP v. 0.1.10
 #### Наша группа в Telegram: https://t.me/btt_manager
 
++ [Вывод из сети BTTC в TRON](./doc/ExchangeTMM.md);
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
 + [Продажа и покупка IN APP](/doc/WavesTMM.md);
@@ -12,7 +13,8 @@ MVP v. 0.1.10
 + [Полезные ссылки](#links).
 
 _**Donate:**_
-- TRX/BTT: _**TSyujStera3SMSxuntzqAaf5y4SBzwnm23**_
+- TRON: _**TVqruXhdyMHqhUQFgyN9KS97kZDtWByBDQ**_
+- ETH/BSC/BTTC: _**0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb**_
 - Waves: _**3PQ5YevZhNaGP7D89YGG64yMPUkg7xSDoEs**_
 - VISA SBERBANK: _**4274 3200 4502 9926**_
 - Speed/BTFS IN APP: _**BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=**_
@@ -183,18 +185,18 @@ docker rm -f tm
 <a name="links">Полезные ссылки</a>
 -------------------------
 Полезные ссылки:
-   - https://inapp.fun - сервис для работы с IN APP
    - https://t.me/btt_manager - наша группа
-   - https://t.me/btt_dev_balance - информация о пополнении шлюза
+   - https://tmm.exchange - мост для вывода с сети _**BTTC**_ в сеть _**TRON**_
+   - https://in-app.tmm.exchange - сервис для работы с _**IN APP**_
+   - [Binance](https://www.binance.com/ru/register?ref=140122449)
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
-   - https://t.me/bttexchangewalletbalance - информация о пополнении шлюза
-   - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS
-   - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS
+   - https://github.com/bittorrent/go-btfs/releases - клиент для работы с BTFS 2.0
+   - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS 1.0
+   - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS 1.0
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
    - [Kyberswap](https://kyberswap.com/#/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=100&networkId=199) - обменник в сети BTTC
    - https://sunswap.com - обменник в сети TRON
    - https://tronstation.io/calculator - калькулятор энергии и пропускной способности
-   
 
 Шлюзы с которых идёт вывод BTT:
    - [TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA](https://tronscan.org/#/address/TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA) _актуальный_
