@@ -7,6 +7,7 @@
 + [Добавление сети BTTC в MetaMask](#bttcMetaMask)
 + [Обмен токенов на TRX в сети BTTC](#bttcSwapToTrx)
 + [Вывод TRX из сети BTTC в TRON](#withdrawFromBttcToTron)
++ [Партнерская программа Take My Money](#referralBonus)
 + [Узнать секретный / приватный ключ BitTorrent Speed](#speedKey)
 + [Вывод IN APP BTT из SPEED в сеть BTTC](#withdrawInApp)
 + [Обмен и вывод средств в банк / qiwi и др.](#bestchange)
@@ -90,6 +91,15 @@
 Группа с технической поддержкой и новостями сервиса [_**https://t.me/TakeMyMoneyExchange**_](https://t.me/TakeMyMoneyExchange)
 
 ![withdrawFromBttcToTron](./img/withdrawFromBttcToTron.png)
+
+<a name="referralBonus">Партнерская программа Take My Money</a>
+-------------------------
+
+Сервис [_**TMM.Exchange**_](https://tmm.exchange) предоставляет партнерскую программу. Бонус в _**TMM**_ начисляют за привлечение пользователей.
+
+За каждого пользователя использовавшего сервис по вашей реферальной ссылке вы будете получать до 25% от _**AIRDROP**_ за перевод через мост.
+
+В данной реферальной ссылке необходимо заменить адрес кошелька на свой: https://tmm.exchange?bonus=0xFA287b314bc87a1e99039838D8e3c99a4dedd032
 
 <a name="speedKey">Узнать секретный / приватный ключ BitTorrent Speed</a>
 -------------------------
