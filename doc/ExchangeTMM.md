@@ -62,11 +62,12 @@
 
 Для всех переводов в сети _**BTTC**_ требуется наличие _**BTT**_ на балансе для оплаты за _**gas**_. Рекомендуется оставлять не менее _**1000 BTT**_ на балансе.
 
-Если у вас есть токены в сети _**BTTC**_ вы можете обменять их на _**TRX**_ на сайте [Kyberswap.com](https://kyberswap.com/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=10&inputCurrency=BTT&outputCurrency=0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662&networkId=199)
+Если у вас есть токены в сети _**BTTC**_ вы можете обменять их на _**TRX**_ на сайте [Just.Money](https://just.money/?from=BTT&n=BTTC&t=swap&to=TRX) или [Kyberswap.com](https://kyberswap.com/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=10&inputCurrency=BTT&outputCurrency=0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662&networkId=199)
 
 Адрес токена _**TRX**_ в сети _**BTTC**_ [_**0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662**_](https://bttcscan.com/token/0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662)
 
-![bttcSwapToTrx](./img/bttcSwapToTrx.png)
+<img src="./img/bttcSwapToTrxJM.png" height="500" />
+<img src="./img/bttcSwapToTrxKs.png" height="500" />
 
 <a name="withdrawFromBttcToTron">Вывод TRX из сети BTTC в TRON</a>
 -------------------------
