@@ -66,7 +66,7 @@
 
 Адрес токена _**TRX**_ в сети _**BTTC**_ [_**0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662**_](https://bttcscan.com/token/0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662)
 
-<img src="./img/bttcSwapToTrxJM.png" height="500" />
+<img src="./img/bttcSwapToTrxJm.png" height="500" />
 <img src="./img/bttcSwapToTrxKs.png" height="500" />
 
 <a name="withdrawFromBttcToTron">Вывод TRX из сети BTTC в TRON</a>
