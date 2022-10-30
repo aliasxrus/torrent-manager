@@ -1,5 +1,5 @@
 # Torrent Manager
-MVP v. 0.1.10
+MVP v. 0.1.14
 #### Наша группа в Telegram: https://t.me/btt_manager
 
 + [Вывод из сети BTTC в TRON](./doc/ExchangeTMM.md);

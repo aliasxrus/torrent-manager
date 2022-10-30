@@ -41,19 +41,19 @@ const blockPeers = async (peers) => {
           continue;
         }
 
-        const isUtVersion = peer.client.includes('3.5.5') && config.filters.uTorrent;
-        const isBtVersion = peer.client.includes('7.10.5') && config.filters.BitTorrent;
-        const isLtVersion = peer.client.includes('1.2.2') && config.filters.LibTorrent;
-        const withBttVersion = isUtVersion || isBtVersion || isLtVersion;
-        if (!withBttVersion) {
-            await block(peer);
-            continue;
-        }
+        // const isUtVersion = peer.client.includes('3.5.5') && config.filters.uTorrent;
+        // const isBtVersion = peer.client.includes('7.10.5') && config.filters.BitTorrent;
+        // const isLtVersion = peer.client.includes('1.2.2') && config.filters.LibTorrent;
+        // const withBttVersion = isUtVersion || isBtVersion || isLtVersion;
+        // if (!withBttVersion) {
+        //     await block(peer);
+        //     continue;
+        // }
 
         const clientWhiteList =
-            // peer.client.startsWith('μTorrent') ||
-            // peer.client.startsWith('BitTorrent') ||
-            peer.client.includes('Torrent') ||
+            peer.client.startsWith('μTorrent') ||
+            peer.client.startsWith('BitTorrent') ||
+            // peer.client.includes('Torrent') ||
             peer.client.startsWith('libtorrent') ||
             peer.client.startsWith('Unknown');
 
