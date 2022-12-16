@@ -2,10 +2,9 @@
 MVP v. 0.1.14
 #### Наша группа в Telegram: https://t.me/btt_manager
 
-+ [Вывод из сети BTTC в TRON](./doc/ExchangeTMM.md);
++ [Вывод из сети BTTC в TRON](./doc/Bridge.md);
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
-+ [Продажа и покупка IN APP](/doc/WavesTMM.md);
 + [Запуск μTorrent в Docker](#docker);
 + [Запуск μTorrent в Docker с VNC](https://github.com/lexandr0s/wine-vnc);
 + [Вывод на Binance](#binance);
@@ -186,8 +185,8 @@ docker rm -f tm
 -------------------------
 Полезные ссылки:
    - https://t.me/btt_manager - наша группа
-   - https://tmm.exchange - мост для вывода с сети _**BTTC**_ в сеть _**TRON**_
-   - https://in-app.tmm.exchange - сервис для работы с _**IN APP**_
+   - https://bridge.burly.tech - мост для вывода с сети _**BTTC**_ в сеть _**TRON**_
+   - https://in-app.burly.tech - сервис для работы с _**IN APP**_
    - [Binance](https://www.binance.com/ru/register?ref=140122449)
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
    - https://github.com/bittorrent/go-btfs/releases - клиент для работы с BTFS 2.0

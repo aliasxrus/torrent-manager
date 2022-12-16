@@ -1,6 +1,5 @@
 # Вывод из сети BTTC в TRON
 #### Наша группа в Telegram: [_**https://t.me/btt_manager**_](https://t.me/btt_manager)
-#### Группа TMM.Exchange в Telegram: [_**https://t.me/TakeMyMoneyExchange**_](https://t.me/TakeMyMoneyExchange)
 
 + [Установка MetaMask](#metaMask)
 + [Сеть TRON](#tronLink)
@@ -11,14 +10,14 @@
 + [Узнать секретный / приватный ключ BitTorrent Speed](#speedKey)
 + [Вывод IN APP BTT из SPEED в сеть BTTC](#withdrawInApp)
 + [Обмен и вывод средств в банк / qiwi и др.](#bestchange)
-+ [Сайт TMM.Exchange](https://tmm.exchange)
++ [Сайт моста BTTC -> TRON](https://bridge.burly.tech)
 + [Сайт Kyberswap](https://kyberswap.com/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=10&inputCurrency=BTT&outputCurrency=0xEdf53026aeA60f8F75FcA25f8830b7e2d6200662&networkId=199)
 + [Сайт Binance](https://www.binance.com/ru/register?ref=140122449)
 
 <a name="metaMask">Установка MetaMask</a>
 -------------------------
 
-Для использования сервиса [_**TMM.Exchange**_](https://tmm.exchange) необходимо установить браузерное или мобильное приложение [_**MetaMask**_](https://metamask.io).
+Для использования сервиса [_**Bridge.Burly.tech**_](https://bridge.burly.tech) необходимо установить браузерное или мобильное приложение [_**MetaMask**_](https://metamask.io).
 
 Для установки перейдите на сайт [metamask.io](https://metamask.io)
 
@@ -33,7 +32,7 @@
 - перейти в _**Кошелек**_
 - нажать кнопку _**Ввод**_ и выбрать _**Ввод криптовалюты**_
 - выбрать монету _**TRX**_ и сеть _**TRX Tron (TRC20)**_
-- будет показан _**Адрес**_ через который можно пополнять счет биржи. Его можно указать в качестве получателя _**TRX**_ на [_**TMM.Exchange**_](https://tmm.exchange)
+- будет показан _**Адрес**_ через который можно пополнять счет биржи. Его можно указать в качестве получателя _**TRX**_ на [_**Bridge.Burly.tech**_](https://bridge.burly.tech)
 
 ![binanceTrxDeposit](./img/binanceTrxDeposit.png)
 
@@ -41,7 +40,7 @@
 -------------------------
 
 Для работы с сетью _**BTTC**_ в _**MetaMask**_ необходимо её добавить, есть 2 способа:
-1. На [_**TMM.Exchange**_](https://tmm.exchange) подключить _**MetaMask**_ нажатием на кнопку _**Connect MetaMask**_. При первом подключении _**MetaMask**_ предложит подтвердить добавление сети.
+1. На [_**Bridge.Burly.tech**_](https://bridge.burly.tech) подключить _**MetaMask**_ нажатием на кнопку _**Connect MetaMask**_. При первом подключении _**MetaMask**_ предложит подтвердить добавление сети.
 2. Добавить сесть вручную:
     - перейти в _**Настройки**_ и выбрать раздел _**Сети**_
     - нажать на кнопку _**Добавить сеть**_, вы попадете в раздел настроек _**Сети > Добавить сеть > Добавить сеть вручную**_
@@ -58,7 +57,7 @@
 <a name="bttcSwapToTrx">Обмен токенов на TRX в сети BTTC</a>
 -------------------------
 
-Мост [_**TMM.Exchange**_](https://tmm.exchange) для перевода использует токен _**TRX**_, так как данный токен не требуют энергии для перевода в сети _**TRON**_.
+Мост [_**Bridge.Burly.tech**_](https://bridge.burly.tech) для перевода использует токен _**TRX**_, так как данный токен не требуют энергии для перевода в сети _**TRON**_.
 
 Для всех переводов в сети _**BTTC**_ требуется наличие _**BTT**_ на балансе для оплаты за _**gas**_. Рекомендуется оставлять не менее _**1000 BTT**_ на балансе.
 
@@ -72,7 +71,7 @@
 <a name="withdrawFromBttcToTron">Вывод TRX из сети BTTC в TRON</a>
 -------------------------
 
-Для использования моста [_**TMM.Exchange**_](https://tmm.exchange) необходимо:
+Для использования моста [_**Bridge.Burly.tech**_](https://bridge.burly.tech) необходимо:
 - подключить _**MetaMask**_ нажатием на кнопку _**Connect MetaMask**_
 - указать сумму _**TRX**_ для перевода. Для указания всего баланса можно нажать на _**TRX Balance**_
 - в поле _**To TRON TRX(estimated)**_ будет указана расчетная сумма к получению в сети _**TRON**_
@@ -85,22 +84,18 @@
 
 Для добавления токена _**TRX**_ и _**TMM**_ в _**MetaMask**_ нажмите на иконку лисы напротив балансов.
 
-Первые месяцы работы сервиса идут бонусные выплаты токенов _**TMM**_ в качестве компенсации комиссии.
-
 Адрес токена _**TMM**_ в сети _**BTTC**_ [_**0x50DFe3D2874E17e6018EFf67d1A5A2dac090686E**_](https://bttcscan.com/token/0x50DFe3D2874E17e6018EFf67d1A5A2dac090686E)
-
-Группа с технической поддержкой и новостями сервиса [_**https://t.me/TakeMyMoneyExchange**_](https://t.me/TakeMyMoneyExchange)
 
 ![withdrawFromBttcToTron](./img/withdrawFromBttcToTron.png)
 
 <a name="referralBonus">Партнерская программа Take My Money</a>
 -------------------------
 
-Сервис [_**TMM.Exchange**_](https://tmm.exchange) предоставляет партнерскую программу. Бонус в _**TMM**_ начисляют за привлечение пользователей.
+Сервис [_**Bridge.Burly.tech**_](https://bridge.burly.tech) предоставляет партнерскую программу. Бонус в _**TMM**_ начисляют за привлечение пользователей.
 
 За каждого пользователя использовавшего сервис по вашей реферальной ссылке вы будете получать до 25% от _**AIRDROP**_ за перевод через мост.
 
-В данной реферальной ссылке необходимо заменить адрес кошелька на свой: https://tmm.exchange?bonus=0xFA287b314bc87a1e99039838D8e3c99a4dedd032
+В данной реферальной ссылке необходимо заменить адрес кошелька на свой: https://bridge.burly.tech?bonus=0xFA287b314bc87a1e99039838D8e3c99a4dedd032
 
 <a name="speedKey">Узнать секретный / приватный ключ BitTorrent Speed</a>
 -------------------------
@@ -114,11 +109,11 @@
 <a name="withdrawInApp">Вывод IN APP BTT из SPEED в сеть BTTC</a>
 -------------------------
 
-Для экономии на комиссии в сети _**TRON**_ при работе с токеном _**BTT**_ можно воспользоваться сервисом [_**in-app.tmm.exchange**_](https://in-app.tmm.exchange)
+Для экономии на комиссии в сети _**TRON**_ при работе с токеном _**BTT**_ можно воспользоваться сервисом [_**in-app.burly.tech**_](https://in-app.burly.tech)
 
-Данный сервис переводит _**IN APP BTT**_ в _**BTT**_ сети _**BTTC**_, что позволяет сделать обмен на _**TRX**_ для вывода в сеть _**TRON**_ через [_**TMM.Exchange**_](https://tmm.exchange)
+Данный сервис переводит _**IN APP BTT**_ в _**BTT**_ сети _**BTTC**_, что позволяет сделать обмен на _**TRX**_ для вывода в сеть _**TRON**_ через [_**Bridge.Burly.tech**_](https://bridge.burly.tech)
 
-Для перевода [_**https://in-app.tmm.exchange/#/bttBuy**_](https://in-app.tmm.exchange/#/bttBuy) необходимо:
+Для перевода [_**in-app.burly.tech/#/bttBuy**_](https://in-app.burly.tech/#/bttBuy) необходимо:
 - в поле _**Откуда**_ указать приватный ключ или 12 слов от кошелька _**Speed**_ [Узнать секретный / приватный ключ BitTorrent Speed](#speedKey)
 - проверить баланс, он будет указан в BTTOLD (в 1000 раз меньше)
 - в поле _**Адрес BTTC Network**_ указать адрес вашего кошелька _**MetaMask**_ [Установка MetaMask](#metaMask)
