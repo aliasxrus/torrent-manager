@@ -15,7 +15,6 @@ _**Donate:**_
 - TRON: _**TVqruXhdyMHqhUQFgyN9KS97kZDtWByBDQ**_
 - ETH/BSC/BTTC: _**0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb**_
 - Waves: _**3PQ5YevZhNaGP7D89YGG64yMPUkg7xSDoEs**_
-- VISA SBERBANK: _**4274 3200 4502 9926**_
 - Speed/BTFS IN APP: _**BHZJ3obt9IYWJWO8r1wQwhpmGpMHjgru1QhZRNq50o30K0FuDF3DaAeI8Wc9fChkjLyFbtH8ajdeLjZiVwEH3rU=**_
 
 _**Donate за автоматическое удаление файлов:**_
