@@ -2,7 +2,6 @@
 MVP v. 0.1.14
 #### Наша группа в Telegram: https://t.me/btt_manager
 
-+ [Вывод из сети BTTC в TRON](./doc/Bridge.md);
 + [Как использовать скрипт](#info);
 + [Как заработать больше](#money);
 + [Запуск μTorrent в Docker](#docker);
@@ -184,14 +183,13 @@ docker rm -f tm
 -------------------------
 Полезные ссылки:
    - https://t.me/btt_manager - наша группа
-   - https://bridge.burly.tech - мост для вывода с сети _**BTTC**_ в сеть _**TRON**_
-   - https://in-app.burly.tech - сервис для работы с _**IN APP**_
    - [Binance](https://www.binance.com/ru/register?ref=140122449)
    - https://github.com/Jackett/Jackett - приложение для подбора торентов + в описание есть хороший список сайтов
    - https://github.com/bittorrent/go-btfs/releases - клиент для работы с BTFS 2.0
    - https://github.com/TRON-US/go-btfs/releases - клиент для работы с BTFS 1.0
    - http://127.0.0.1:5001/hostui/#/wallet - ссылка для входа в кошелёк BTFS 1.0
    - https://netcheif.com/Articles/uTorrent/utorrent.html - полезная информация о μTorrent
+   - [Sushi](https://www.sushi.com/swap?fromChainId=199) - обменник в сети BTTC
    - [Kyberswap](https://kyberswap.com/#/swap?referral=0xbD0bCA41d015e9F436207Bf1CE326256D5DfADDb&fee_percent=100&networkId=199) - обменник в сети BTTC
    - [Just.Money](https://just.money/?from=BTT&n=BTTC&t=swap&to=TRX) - обменник в сети BTTC
    - https://sunswap.com - обменник в сети TRON
