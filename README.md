@@ -196,7 +196,10 @@ docker rm -f tm
    - https://tronstation.io/calculator - калькулятор энергии и пропускной способности
 
 Шлюзы с которых идёт вывод BTT:
-   - [TXj3Zjdd7kAWLUHKZCD3XpJSpVqWxPGPtA](https://tronscan.org/#/address/TXj3Zjdd7kAWLUHKZCD3XpJSpVqWxPGPtA) _актуальный_
+
+   - [0x3c2f02626f0eb1453de96a7f7ac1ed3f8b425605](https://bttcscan.com/address/0x3c2f02626f0eb1453de96a7f7ac1ed3f8b425605) _актуальный BTTC_
+   - [TFTRrqHKwNev1sjPNFq9fnNBuF7Sok7vLz](https://tronscan.org/#/address/TFTRrqHKwNev1sjPNFq9fnNBuF7Sok7vLz) _актуальный TRON_
+   - [TXj3Zjdd7kAWLUHKZCD3XpJSpVqWxPGPtA](https://tronscan.org/#/address/TXj3Zjdd7kAWLUHKZCD3XpJSpVqWxPGPtA)
    - [TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA](https://tronscan.org/#/address/TWaSm8dnvTdJQ9hcpW3g8m4QEfJspcuDwA)
    - [TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5](https://tronscan.org/#/address/TTZu7wpHa9tnQjFUDrsjgPfXE7fck7yYs5)
    - [TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a](https://tronscan.org/#/address/TA1EHWb1PymZ1qpBNfNj9uTaxd18ubrC7a)
